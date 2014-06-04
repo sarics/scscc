@@ -1,4 +1,4 @@
-scscc
+SCsCC
 =====
 
 SCs Currency Converter
