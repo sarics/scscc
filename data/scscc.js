@@ -19,6 +19,8 @@ var css =
 var style = document.createElement("style");
 style.innerHTML = css;
 
+var patt0 = /(((\d{1,3}((\,|\.|\s)\d{3})+|(\d+))((\.|\,)\d{1,9})?)|(\.\d{1,9}))/g;
+
 var patt = {
 	EUR: [ 
 		/(€|eur(os|o)?)\s?(((\d{1,3}((\,|\.|\s)\d{3})+|(\d+))((\.|\,)\d{1,9})?)|(\.\d{1,9}))/ig,
@@ -32,6 +34,19 @@ var patt = {
 		/(£|gbp)\s?(((\d{1,3}((\,|\.|\s)\d{3})+|(\d+))((\.|\,)\d{1,9})?)|(\.\d{1,9}))/ig,
 		/(((\d{1,3}((\,|\.|\s)\d{3})+|(\d+))((\.|\,)\d{1,9})?)|(\.\d{1,9}))(,--)?\s?(£|gbp)/ig
 	]
+};
+
+var symbs = {
+	prev: {
+		EUR: /(€|eur(os|o)?)$/ig,
+		USD: /(\$|usd)$/ig,
+		GBP: /(£|gbp)$/ig
+	},
+	next: {
+		EUR: /^(€|eur(os|o)?)/ig,
+		USD: /^(\$|usd)/ig,
+		GBP: /^(£|gbp)/ig
+	}
 };
 
 var observer = new MutationObserver(function(mutlist) {
@@ -148,13 +163,13 @@ function checkMutations(mutlist) {
 // from http://stackoverflow.com/questions/298750/how-do-i-select-text-nodes-with-jquery
 function getTextNodesIn(node, mutation) {
 	var textNodes = [];
-	var nonWhitespaceMatcher = /\S{2,}/;
+	var ignoreNodes = /^(script|style|pre)$/i;
 	
 	function getTextNodes(node) {
-		if (node.nodeName === "SCRIPT" || node.nodeName === "STYLE" || node.className === "scscc") return;
+		if (node.nodeName.search(ignoreNodes) !== -1 || node.className === "scscc") return;
 		
 		if (node.nodeType === 3) {
-			if (nonWhitespaceMatcher.test(node.nodeValue)) {
+			if (node.nodeValue.search(patt0) !== -1) {
 				textNodes.push(node);
 			}
 		}
@@ -193,8 +208,58 @@ function findMatches(textNodes, mutation) {
 				}
 			}
 		}
-		
+
 		if (found) replaceNode(textNodes[i], matches, mutation);
+		else {
+			var chckTxt, chckSymbs;
+			
+			m = txt.match(patt0);
+			if (m.length !== 1 || m[0] !== txt.trim()) continue;
+			
+			if (textNodes[i].previousSibling && textNodes[i].previousSibling.lastChild && textNodes[i].previousSibling.lastChild.nodeType === 3) {
+				chckTxt = textNodes[i].previousSibling.lastChild.nodeValue.trim();
+				chckSymbs = symbs.prev;
+			}
+			else if (textNodes[i].parentNode.previousSibling) {
+				if (textNodes[i].parentNode.previousSibling.nodeType === 3) {
+					chckTxt = textNodes[i].parentNode.previousSibling.nodeValue.trim();
+					chckSymbs = symbs.prev;
+				}
+				else if (textNodes[i].parentNode.previousSibling.lastChild && textNodes[i].parentNode.previousSibling.lastChild.nodeType === 3) {
+					chckTxt = textNodes[i].parentNode.previousSibling.lastChild.nodeValue.trim();
+					chckSymbs = symbs.prev;
+				}
+			}
+			else {
+				if (textNodes[i].nextSibling && textNodes[i].nextSibling.firstChild && textNodes[i].nextSibling.firstChild.nodeType === 3) {
+					chckTxt = textNodes[i].nextSibling.firstChild.nodeValue.trim();
+					chckSymbs = symbs.next;
+				}
+				else if (textNodes[i].parentNode.nextSibling) {
+					if (textNodes[i].parentNode.nextSibling.nodeType === 3) {
+						chckTxt = textNodes[i].parentNode.nextSibling.nodeValue.trim();
+						chckSymbs = symbs.next;
+					}
+					else if (textNodes[i].parentNode.nextSibling.firstChild && textNodes[i].parentNode.nextSibling.firstChild.nodeType === 3) {
+						chckTxt = textNodes[i].parentNode.nextSibling.firstChild.nodeValue.trim();
+						chckSymbs = symbs.next;
+					}
+				}
+			}
+			
+			if (chckTxt) {
+				for (var from in chckSymbs) {
+					if (from === uPrefs.toCurr) continue;
+					
+					if (chckTxt.search(chckSymbs[from]) !== -1) {
+						matches[from] = m;
+						
+						replaceNode(textNodes[i], matches, mutation);
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
