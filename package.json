@@ -6,7 +6,7 @@
 	"description": "Convert US Dollar, British Pound Sterling and Euro prices to a user set currency",
 	"author": "sarics",
 	"license": "GPLv2",
-	"version": "0.7.5",
+	"version": "0.7.6",
 	
 	"preferences": [{
 		"title": "Convert to",
