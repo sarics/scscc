@@ -19,7 +19,9 @@ addon.port.on("showPanel", function() {
 		spans[i].textContent = lastUpdate(spans[i].dataset.id);
 	}
 	
-	addon.port.emit("panelHeight", div.clientHeight);
+	to = setTimeout(function() {
+		addon.port.emit("panelHeight", div.clientHeight);
+	}, 200);
 });
 
 addon.port.on("refreshCurrRates", function(data) {
@@ -114,7 +116,7 @@ function refreshCurrRateList() {
 	
 	to = setTimeout(function() {
 		addon.port.emit("panelHeight", div.clientHeight);
-	}, 500);
+	}, 200);
 }
 
 function lastUpdate(id) {

@@ -5,6 +5,10 @@ body {
 	cursor: default;
 }
 
+div {
+	width: 250px;
+}
+
 button {
 	width: 100%;
 	height: 2em;
@@ -16,7 +20,7 @@ p {
 }
 
 ul {
-	margin: 0 0 0 20px;
+	margin: 0 20px;
 	padding: 0;
 }
 
