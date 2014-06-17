@@ -101,7 +101,7 @@ function replaceAllElems() {
 		subtree: true
 	});
 	
-	getTextNodesIn(document.body, false);
+	getTextNodesIn(document.body);
 	
 	// add the custom style
 	if (uPrefs.style) document.head.appendChild(style);
@@ -154,14 +154,14 @@ function checkMutations(mutlist) {
 		if (mutlist[i].addedNodes.length === 0) continue;
 		
 		for (var j = 0, len = mutlist[i].addedNodes.length; j < len; j++) {
-			getTextNodesIn(mutlist[i].addedNodes[j], true);
+			if (mutlist[i].addedNodes[j].className !== "scscc") getTextNodesIn(mutlist[i].addedNodes[j]);
 		}
 	}
 }
 
 // get all text nodes of a given node
 // from http://stackoverflow.com/questions/298750/how-do-i-select-text-nodes-with-jquery
-function getTextNodesIn(node, mutation) {
+function getTextNodesIn(node) {
 	var textNodes = [];
 	var ignoreNodes = /^(script|style|pre)$/i;
 	
@@ -182,11 +182,11 @@ function getTextNodesIn(node, mutation) {
 	
 	getTextNodes(node);
 	
-	if (textNodes.length > 0) findMatches(textNodes, mutation);
+	if (textNodes.length > 0) findMatches(textNodes);
 }
 
 // check if there is any pattern match in a text node and return the matches
-function findMatches(textNodes, mutation) {
+function findMatches(textNodes) {
 	var found, m, matches, txt;
 	
 	for (var i = 0, ilen = textNodes.length; i < ilen; i++) {
@@ -209,13 +209,13 @@ function findMatches(textNodes, mutation) {
 			}
 		}
 
-		if (found) replaceNode(textNodes[i], matches, mutation);
-		else checkSiblings(textNodes[i], mutation);
+		if (found) replaceNode(textNodes[i], matches);
+		else checkSiblings(textNodes[i]);
 	}
 }
 
 // check if currency symbol is in an other node
-function checkSiblings(textNode, mutation) {
+function checkSiblings(textNode) {
 	var chckSymbs;
 	var chckTxt = {};
 	var matches = {};
@@ -267,7 +267,7 @@ function checkSiblings(textNode, mutation) {
 			if (chckTxt[pos].search(chckSymbs[from]) !== -1) {
 				matches[from] = m;
 				
-				replaceNode(textNode, matches, mutation);
+				replaceNode(textNode, matches);
 				return;
 			}
 		}
@@ -275,12 +275,10 @@ function checkSiblings(textNode, mutation) {
 }
 
 // replace the prices in the text node with the converted data nodes
-function replaceNode(node, matches, mutation) {
+function replaceNode(node, matches) {
 	var matchInd, removeNode, tmpDiv, tmpTxt, txt, txtNode;
 	var parentNode = node.parentNode;
 	var dataNodes = replaceWith(node.nodeValue, matches);
-	
-	if (mutation) observer.disconnect();
 	
 	for (var i = 0, ilen = dataNodes.length; i < ilen; i++) {
 		if (!node.parentNode) return;
@@ -314,13 +312,6 @@ function replaceNode(node, matches, mutation) {
 				break;
 			}
 		}
-	}
-	
-	if (mutation) {
-		observer.observe(document.body, {
-			childList: true,
-			subtree: true
-		});
 	}
 }
 
