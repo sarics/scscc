@@ -2,7 +2,8 @@
 
 var currRates, currReqs, uPrefs;
 
-var css = 
+var style = document.createElement("style");
+style.innerHTML = 
 	"data.scscc {\n\
 		padding: 0 2px !important;\n\
 		color: inherit !important;\n\
@@ -16,8 +17,6 @@ var css =
 		background-color: red !important;\n\
 		color: white !important;\n\
 	}";
-var style = document.createElement("style");
-style.innerHTML = css;
 
 var patt0 = /(((\d{1,3}((\,|\.|\s)\d{3})+|(\d+))((\.|\,)\d{1,9})?)|(\.\d{1,9}))/g;
 
@@ -133,7 +132,7 @@ function revertRefresh(refresh) {
 	// find and refresh/revert already converted prices
 	data = document.querySelectorAll("data.scscc");
 	for (var i = 0, len = data.length; i < len; i++) {
-		if (refresh && checkCurrRate(data[i].dataset.curr)) {
+		if (refresh && data[i].dataset.curr !== uPrefs.toCurr && checkCurrRate(data[i].dataset.curr)) {
 			replace = parseFloat(data[i].value) * currRates[data[i].dataset.curr + "to" + uPrefs.toCurr];
 			replace = formatPrice(replace);
 			replace = document.createTextNode(replace);
@@ -147,6 +146,7 @@ function revertRefresh(refresh) {
 	
 	if (refresh) replaceAllElems();
 }
+
 
 function checkMutations(mutlist) {
 	for (var i in mutlist) {
@@ -189,7 +189,7 @@ function getTextNodesIn(node, mutation) {
 function findMatches(textNodes, mutation) {
 	var found, m, matches, txt;
 	
-	for (var i = 0, len = textNodes.length; i < len; i++) {
+	for (var i = 0, ilen = textNodes.length; i < ilen; i++) {
 		found = false;
 		matches = {};
 		txt = textNodes[i].nodeValue;
@@ -210,75 +210,111 @@ function findMatches(textNodes, mutation) {
 		}
 
 		if (found) replaceNode(textNodes[i], matches, mutation);
-		else {
-			var chckTxt, chckSymbs;
+		else checkSiblings(textNodes[i], mutation);
+	}
+}
+
+// check if currency symbol is in an other node
+function checkSiblings(textNode, mutation) {
+	var chckSymbs;
+	var chckTxt = {};
+	var matches = {};
+	var txt = textNode.nodeValue;
+	
+	var m = txt.match(patt0);
+	if (m.length !== 1 || m[0] !== txt.trim()) return;
+	
+	// check previous sibling of
+	// this node -> check sibling's last child
+	if (textNode.previousSibling && textNode.previousSibling.lastChild && textNode.previousSibling.lastChild.nodeType === 3) {
+		chckTxt["prev"] = textNode.previousSibling.lastChild.nodeValue.trim();
+	}
+	// parent node
+	else if (textNode.parentNode.previousSibling) {
+		// if text node
+		if (textNode.parentNode.previousSibling.nodeType === 3) {
+			chckTxt["prev"] = textNode.parentNode.previousSibling.nodeValue.trim();
+		}
+		// if not text node -> check last child
+		else if (textNode.parentNode.previousSibling.lastChild && textNode.parentNode.previousSibling.lastChild.nodeType === 3) {
+			chckTxt["prev"] = textNode.parentNode.previousSibling.lastChild.nodeValue.trim();
+		}
+	}
+	
+	// check next sibling of
+	// this node -> check sibling's first child
+	if (textNode.nextSibling && textNode.nextSibling.firstChild && textNode.nextSibling.firstChild.nodeType === 3) {
+		chckTxt["next"] = textNode.nextSibling.firstChild.nodeValue.trim();
+	}
+	// parent node
+	else if (textNode.parentNode.nextSibling) {
+		// if text node
+		if (textNode.parentNode.nextSibling.nodeType === 3) {
+			chckTxt["next"] = textNode.parentNode.nextSibling.nodeValue.trim();
+		}
+		// if not text node -> check first child
+		else if (textNode.parentNode.nextSibling.firstChild && textNode.parentNode.nextSibling.firstChild.nodeType === 3) {
+			chckTxt["next"] = textNode.parentNode.nextSibling.firstChild.nodeValue.trim();
+		}
+	}
+	
+	for (var pos in chckTxt) {
+		chckSymbs = symbs[pos];
+		
+		for (var from in chckSymbs) {
+			if (from === uPrefs.toCurr) continue;
 			
-			m = txt.match(patt0);
-			if (m.length !== 1 || m[0] !== txt.trim()) continue;
-			
-			if (textNodes[i].previousSibling && textNodes[i].previousSibling.lastChild && textNodes[i].previousSibling.lastChild.nodeType === 3) {
-				chckTxt = textNodes[i].previousSibling.lastChild.nodeValue.trim();
-				chckSymbs = symbs.prev;
-			}
-			else if (textNodes[i].parentNode.previousSibling) {
-				if (textNodes[i].parentNode.previousSibling.nodeType === 3) {
-					chckTxt = textNodes[i].parentNode.previousSibling.nodeValue.trim();
-					chckSymbs = symbs.prev;
-				}
-				else if (textNodes[i].parentNode.previousSibling.lastChild && textNodes[i].parentNode.previousSibling.lastChild.nodeType === 3) {
-					chckTxt = textNodes[i].parentNode.previousSibling.lastChild.nodeValue.trim();
-					chckSymbs = symbs.prev;
-				}
-			}
-			else {
-				if (textNodes[i].nextSibling && textNodes[i].nextSibling.firstChild && textNodes[i].nextSibling.firstChild.nodeType === 3) {
-					chckTxt = textNodes[i].nextSibling.firstChild.nodeValue.trim();
-					chckSymbs = symbs.next;
-				}
-				else if (textNodes[i].parentNode.nextSibling) {
-					if (textNodes[i].parentNode.nextSibling.nodeType === 3) {
-						chckTxt = textNodes[i].parentNode.nextSibling.nodeValue.trim();
-						chckSymbs = symbs.next;
-					}
-					else if (textNodes[i].parentNode.nextSibling.firstChild && textNodes[i].parentNode.nextSibling.firstChild.nodeType === 3) {
-						chckTxt = textNodes[i].parentNode.nextSibling.firstChild.nodeValue.trim();
-						chckSymbs = symbs.next;
-					}
-				}
-			}
-			
-			if (chckTxt) {
-				for (var from in chckSymbs) {
-					if (from === uPrefs.toCurr) continue;
-					
-					if (chckTxt.search(chckSymbs[from]) !== -1) {
-						matches[from] = m;
-						
-						replaceNode(textNodes[i], matches, mutation);
-						break;
-					}
-				}
+			if (chckTxt[pos].search(chckSymbs[from]) !== -1) {
+				matches[from] = m;
+				
+				replaceNode(textNode, matches, mutation);
+				return;
 			}
 		}
 	}
 }
 
-// replace the text node with the html text
+// replace the prices in the text node with the converted data nodes
 function replaceNode(node, matches, mutation) {
-	var replace;
-	
-	if (!node.parentNode) return;
-	
-	replace = document.createElement("div");
-	replace.innerHTML = replaceTxt(node.nodeValue, matches);
+	var matchInd, removeNode, tmpDiv, tmpTxt, txt, txtNode;
+	var parentNode = node.parentNode;
+	var dataNodes = replaceWith(node.nodeValue, matches);
 	
 	if (mutation) observer.disconnect();
 	
-	while (replace.firstChild) {
-		node.parentNode.insertBefore(replace.firstChild, node);
+	for (var i = 0, ilen = dataNodes.length; i < ilen; i++) {
+		if (!node.parentNode) return;
+		
+		for (var j = 0, jlen = parentNode.childNodes.length; j < jlen; j++) {
+			if (parentNode.childNodes[j].nodeType === 3 && parentNode.childNodes[j].nodeValue.indexOf(dataNodes[i].title) !== -1) {
+				removeNode = parentNode.childNodes[j];
+				txt = removeNode.nodeValue;
+				matchInd = txt.indexOf(dataNodes[i].title);
+				tmpDiv = document.createElement("div");
+				
+				if (matchInd !== 0) {
+					tmpTxt = txt.slice(0, matchInd);
+					txtNode = document.createTextNode(tmpTxt);
+					tmpDiv.appendChild(txtNode);
+				}
+				
+				tmpDiv.appendChild(dataNodes[i]);
+				
+				if (txt.charAt(matchInd + dataNodes[i].title.length) !== "") {
+					tmpTxt = txt.slice(matchInd + dataNodes[i].title.length);
+					txtNode = document.createTextNode(tmpTxt);
+					tmpDiv.appendChild(txtNode);
+				}
+				
+				while (tmpDiv.firstChild) {
+					parentNode.insertBefore(tmpDiv.firstChild, removeNode);
+				}
+				parentNode.removeChild(removeNode);
+				
+				break;
+			}
+		}
 	}
-	
-	node.parentNode.removeChild(node);
 	
 	if (mutation) {
 		observer.observe(document.body, {
@@ -288,47 +324,42 @@ function replaceNode(node, matches, mutation) {
 	}
 }
 
-// convert and replace all prices in a text
-function replaceTxt(txt, matches) {
-	var match, repl;
-	var values = {};
+// find and convert the prices in the text, and return them as data nodes
+function replaceWith(txt, matches) {
+	var data, match, repl;
+	var dataNodes = [];
 	
 	for (var from in matches) {
-		if (!values.hasOwnProperty(from)) values[from] = [];
-		
 		if (!checkCurrRate(from)) continue;
 		
 		for (var mid in matches[from]) {
+			data = document.createElement("data");
+			data.className = "scscc";
+			data.dataset.curr = from;
+			
 			match = matches[from][mid];
 			
 			if (txt.trim() !== match) {
 				match = checkSpecCases(txt, match, from);
 				if (!match) continue;
-				if (match !== matches[from][mid]) matches[from][mid] = match;
 			}
 			
 			repl = match;
+			data.title = match;
 			
 			repl = cleanPrice(repl);
-			
-			values[from][mid] = repl;
+			data.value = repl;
 			
 			repl = parseFloat(repl) * currRates[from + "to" + uPrefs.toCurr];
 			
 			repl = formatPrice(repl);
+			data.textContent = repl;
 			
-			txt = txt.replace(match, "<data" + from + mid + ">" + repl + "</data>");
+			dataNodes.push(data);
 		}
 	}
 	
-	for (var from in matches) {
-		for (var mid in matches[from]) {
-			txt = txt.replace("<data" + from + mid + ">", "<data class=\"scscc\" data-curr=\"" + from + "\" value=\"" + values[from][mid] 
-					+ "\" title=\"" + matches[from][mid] + "\">");
-		}
-	}
-	
-	return txt;
+	return dataNodes;
 }
 
 
