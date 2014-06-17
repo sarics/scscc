@@ -9,14 +9,14 @@ addon.port.once("firstRun", function(data) {
 	
 	refreshCurrRateList();
 	
-	stateBtn.innerHTML = (state) ? "Turn off" : "Turn on";
+	stateBtn.textContent = (state) ? "Turn off" : "Turn on";
 });
 
 addon.port.on("showPanel", function() {
 	var spans = document.querySelectorAll("span.upd");
 	
 	for (var i = 0, len = spans.length; i < len; i++) {
-		spans[i].innerHTML = lastUpdate(spans[i].dataset.id);
+		spans[i].textContent = lastUpdate(spans[i].dataset.id);
 	}
 	
 	addon.port.emit("panelHeight", div.clientHeight);
@@ -39,11 +39,11 @@ window.addEventListener("load", function() {
 	
 	stateBtn.addEventListener("click", function() {
 		if (state) {
-			this.innerHTML = "Turn on";
+			this.textContent = "Turn on";
 			state = false;
 		}
 		else {
-			this.innerHTML = "Turn off";
+			this.textContent = "Turn off";
 			state = true;
 		}
 		
@@ -75,11 +75,27 @@ function refreshCurrRateList() {
 	for (var id in currRates) {
 		currs = id.split("to");
 		
-		lihtml = "<span class=\"curr\">" + currs[0] + " to " + currs[1] + ":</span> <strong>" + currRates[id] + 
-				"</strong><br><span class=\"upd\" data-id=\"" + id + "\">" + lastUpdate(id) + "</span>";
-		
 		li = document.createElement("li");
-		li.innerHTML = lihtml;
+		
+		// span.curr - fromCurr to toCurr:
+		lihtml = document.createElement("span");
+		lihtml.className = "curr";
+		lihtml.textContent = currs[0] + " to " + currs[1] + ": ";
+		li.appendChild(lihtml);
+		
+		// strong - currRate
+		lihtml = document.createElement("strong");
+		lihtml.textContent = currRates[id];
+		li.appendChild(lihtml);
+		
+		li.appendChild(document.createElement("br"));
+		
+		// span.upd - lastUpdate
+		lihtml = document.createElement("span");
+		lihtml.className = "upd";
+		lihtml.dataset.id = id;
+		lihtml.textContent = lastUpdate(id);
+		li.appendChild(lihtml);
 		
 		ul.appendChild(li);
 	}
@@ -88,7 +104,7 @@ function refreshCurrRateList() {
 		resBtn.style.display = "none";
 		
 		li = document.createElement("li");
-		li.innerHTML = "No downloaded exchange rate yet.";
+		li.textContent = "No downloaded exchange rate yet.";
 		
 		ul.appendChild(li);
 	}
