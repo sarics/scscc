@@ -1,10 +1,11 @@
 {
-	"title": "SCs Currency Converter",
 	"name": "scscc",
-	"icon": "data/icon48.png",
+	"title": "SCs Currency Converter",
 	"id": "scscurrencyconverter@sarics",
 	"description": "Convert US Dollar, British Pound Sterling and Euro prices to a user set currency",
 	"author": "sarics",
+	"icon": "data/icon48.png",
+	"homepage": "https://addons.mozilla.org/addon/scscurrencyconverter/",
 	"license": "GPLv2",
 	"version": "0.7.7",
 	
@@ -455,7 +456,7 @@
 		]
 	},
 	{
-		"title": "Add style to converted prices",
+		"title": "Add custom style to converted prices",
 		"name": "style",
 		"type": "bool",
 		"value": true
