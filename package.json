@@ -382,7 +382,7 @@
 		]
 	},
 	{
-		"title": "Rond price",
+		"title": "Round price",
 		"name": "round",
 		"type": "bool",
 		"value": true
