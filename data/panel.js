@@ -2,35 +2,6 @@
 
 var currRates, currRatesLT, div, resBtn, state, stateBtn, to;
 
-addon.port.once("firstRun", function(data) {
-	currRates = data[0];
-	currRatesLT = data[1];
-	state = data[2];
-	
-	refreshCurrRateList();
-	
-	stateBtn.textContent = (state) ? "Turn off" : "Turn on";
-});
-
-addon.port.on("showPanel", function() {
-	var spans = document.querySelectorAll("span.upd");
-	
-	for (var i = 0, len = spans.length; i < len; i++) {
-		spans[i].textContent = lastUpdate(spans[i].dataset.id);
-	}
-	
-	to = setTimeout(function() {
-		addon.port.emit("panelHeight", div.clientHeight);
-	}, 200);
-});
-
-addon.port.on("refreshCurrRates", function(data) {
-	currRates = data[0];
-	currRatesLT = data[1];
-	
-	refreshCurrRateList();
-});
-
 
 
 
@@ -67,9 +38,9 @@ window.addEventListener("load", function() {
 
 
 function refreshCurrRateList() {
-	var currs, li, lihtml, ul;
+	var currs, li, lihtml;
+	var ul = document.querySelector("ul");
 	
-	ul = document.querySelector("ul");
 	while (ul.firstChild) {
 		ul.removeChild(ul.firstChild);
 	}
@@ -120,9 +91,7 @@ function refreshCurrRateList() {
 }
 
 function lastUpdate(id) {
-	var lt;
-	
-	lt = Date.now() - currRatesLT[id];
+	var lt = Date.now() - currRatesLT[id];
 	
 	if (lt > 3600000) {
 		lt = Math.floor(lt / 3600000);
@@ -138,3 +107,56 @@ function lastUpdate(id) {
 	
 	return "(updated " + lt + " ago)";
 }
+
+function showToCurr(curr) {
+	var phtml;
+	var toCurrP = document.querySelector("#toCurr");
+	
+	while (toCurrP.firstChild) {
+		toCurrP.removeChild(toCurrP.firstChild);
+	}
+	
+	phtml = document.createElement("strong");
+	phtml.textContent = (curr === "") ? "No set currency! " : "Convert to: ";
+	toCurrP.appendChild(phtml);
+	
+	phtml = (curr === "") ? "Please select a currency on the options page." : curr;
+	phtml = document.createTextNode(phtml);
+	toCurrP.appendChild(phtml);
+}
+
+
+
+
+addon.port.once("firstRun", function(data) {
+	currRates = data[0];
+	currRatesLT = data[1];
+	state = data[2];
+	
+	showToCurr(data[3]);
+	
+	refreshCurrRateList();
+	
+	stateBtn.textContent = (state) ? "Turn off" : "Turn on";
+});
+
+addon.port.on("showPanel", function(data) {
+	showToCurr(data);
+	
+	var spans = document.querySelectorAll("span.upd");
+	
+	for (var i = 0, len = spans.length; i < len; i++) {
+		spans[i].textContent = lastUpdate(spans[i].dataset.id);
+	}
+	
+	to = setTimeout(function() {
+		addon.port.emit("panelHeight", div.clientHeight);
+	}, 200);
+});
+
+addon.port.on("refreshCurrRates", function(data) {
+	currRates = data[0];
+	currRatesLT = data[1];
+	
+	refreshCurrRateList();
+});
