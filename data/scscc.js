@@ -502,6 +502,6 @@ self.port.on("refreshCurrRates", function(data) {
 	if (prefs.btn && prefs.toCurr !== "") scscc.revertRefresh(true);
 });
 
-self.on("detach", function() {
+self.port.on("detach", function() {
 	setTimeout(function() { scscc.revertRefresh(false); }, 1000);
 });
