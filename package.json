@@ -7,7 +7,7 @@
 	"icon": "data/icon48.png",
 	"homepage": "https://addons.mozilla.org/addon/scscurrencyconverter/",
 	"license": "GPLv2",
-	"version": "0.8",
+	"version": "0.8.1",
 	
 	"preferences": [{
 		"title": "Convert to",
