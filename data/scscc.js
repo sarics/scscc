@@ -1,6 +1,6 @@
 "use strict";
 
-var scscc = {};
+var scscc = scscc || {};
 
 (function() {
 	var uPrefs, currRates;
@@ -37,7 +37,7 @@ var scscc = {};
 	};
 
 	var style = document.createElement("style");
-	style.appendChild(document.createTextNode(
+	style.textContent =
 		"data.scscc {\n\
 			padding: 0 2px !important;\n\
 			color: inherit !important;\n\
@@ -50,7 +50,7 @@ var scscc = {};
 		data.scscc:hover {\n\
 			background-color: red !important;\n\
 			color: white !important;\n\
-		}"));
+		}";
 
 	var observer = new MutationObserver(function(mutlist) {
 		checkMutations(mutlist);
@@ -66,8 +66,9 @@ var scscc = {};
 			case "currRates":
 				currRates = data;
 				break;
-			default:
+			case "currReqs":
 				currReqs = {};
+				break;
 		}
 	};
 	
@@ -471,7 +472,7 @@ self.port.once("firstRun", function(data) {
 	scscc.set("uPrefs", data[0]);
 	scscc.set("currRates", data[1]);
 	
-	if (data[0].btn) scscc.replaceAllElems();
+	if (data[0].btn && data[0].toCurr !== "") scscc.replaceAllElems();
 });
 
 self.port.on("refreshUPrefs", function(data) {
@@ -487,7 +488,8 @@ self.port.on("refreshUPrefs", function(data) {
 	}
 	
 	if (changed) {
-		scscc.revertRefresh(data.btn);
+		if (data.btn && data.toCurr !== "") scscc.revertRefresh(true);
+		else scscc.revertRefresh(false);
 	}
 });
 
@@ -495,9 +497,9 @@ self.port.on("refreshCurrRates", function(data) {
 	var prefs = scscc.getPrefs();
 	
 	scscc.set("currRates", data);
-	scscc.set();
+	scscc.set("currReqs");
 	
-	if (prefs.btn) scscc.revertRefresh(true);
+	if (prefs.btn && prefs.toCurr !== "") scscc.revertRefresh(true);
 });
 
 self.on("detach", function() {
