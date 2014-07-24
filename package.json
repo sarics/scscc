@@ -7,14 +7,18 @@
 	"icon": "data/icon48.png",
 	"homepage": "https://addons.mozilla.org/addon/scscurrencyconverter/",
 	"license": "GPLv2",
-	"version": "0.7.7",
+	"version": "0.8",
 	
 	"preferences": [{
 		"title": "Convert to",
 		"name": "toCurr",
 		"type": "menulist",
-		"value": "HUF",
+		"value": "",
 		"options": [
+			{
+				"value": "",
+				"label": "Please select a currency"
+			},
 			{
 				"value": "DZD",
 				"label": "Algerian Dinar"
@@ -391,7 +395,7 @@
 		"title": "Currency symbol",
 		"name": "symbol",
 		"type": "string",
-		"value": "Ft"
+		"value": ""
 	},
 	{
 		"title": "Symbol position",
