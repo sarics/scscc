@@ -344,8 +344,7 @@ var scscc = scscc || {};
 			self.port.emit("getCurrRates", [ from, uPrefs.toCurr ]);
 		}
 
-		if (!currRates.hasOwnProperty(from + "to" + uPrefs.toCurr)) return false;
-		return true;
+		return currRates.hasOwnProperty(from + "to" + uPrefs.toCurr);
 	}
 
 

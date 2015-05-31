@@ -84,10 +84,8 @@ function refreshCurrRateList() {
 	else {
 		resBtn.style.display = "initial";
 	}
-	
-	to = setTimeout(function() {
-		addon.port.emit("panelHeight", div.clientHeight);
-	}, 200);
+
+	addon.port.emit("panelHeight", div.clientHeight);
 }
 
 function lastUpdate(id) {
@@ -148,10 +146,8 @@ addon.port.on("showPanel", function(data) {
 	for (var i = 0, len = spans.length; i < len; i++) {
 		spans[i].textContent = lastUpdate(spans[i].dataset.id);
 	}
-	
-	to = setTimeout(function() {
-		addon.port.emit("panelHeight", div.clientHeight);
-	}, 200);
+
+	addon.port.emit("panelHeight", div.clientHeight);
 });
 
 addon.port.on("refreshCurrRates", function(data) {

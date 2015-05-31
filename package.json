@@ -1,14 +1,18 @@
 {
+	"id": "scscurrencyconverter@sarics",
 	"name": "scscc",
 	"title": "SCs Currency Converter",
-	"id": "scscurrencyconverter@sarics",
 	"description": "Convert US Dollar, British Pound Sterling and Euro prices to a user set currency",
+	"version": "0.9.0",
 	"author": "sarics",
 	"icon": "data/icon48.png",
 	"homepage": "https://addons.mozilla.org/addon/scscurrencyconverter/",
-	"license": "GPLv2",
-	"version": "0.8.1",
-	
+	"license": "GPL-2.0",
+	"main": "index.js",
+	"engines": {
+		"firefox": ">=38.0a1"
+	},
+
 	"preferences": [{
 		"title": "Convert to",
 		"name": "toCurr",
