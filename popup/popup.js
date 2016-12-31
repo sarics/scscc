@@ -1,51 +1,53 @@
-var manifest = chrome.runtime.getManifest();
-var toCurrPref = manifest.preferences.filter(function filterPref(pref) {
-  return pref.name === 'toCurr';
-})[0] || {};
-var toCurrOpts = toCurrPref.options || [];
+const resBtnElem = document.querySelector('#reset');
+const stateBtnElem = document.querySelector('#state');
+const optionsBtnElem = document.querySelector('#options');
+const toCurrSpanElem = document.querySelector('#toCurr');
+const ratesUlElem = document.querySelector('#rates');
 
-var resBtnElem = document.querySelector('#reset');
-var stateBtnElem = document.querySelector('#state');
-var optionsBtnElem = document.querySelector('#options');
-var toCurrPElem = document.querySelector('#toCurr');
-var ratesUlElem = document.querySelector('#rates');
+let toCurrOpts;
 
-stateBtnElem.addEventListener('click', function listener() {
-  var onGet = function onGet(storage) {
-    var preferences = storage.preferences;
-    preferences.enabled = !preferences.enabled;
+browser.runtime.getBackgroundPage()
+  .then((bgWindow) => {
+    const toCurrOpt = bgWindow.OPTIONS.find(opt => opt.name === 'toCurr') || {};
+    toCurrOpts = toCurrOpt.options || [];
 
-    chrome.storage.local.set({ preferences: preferences });
-  };
+    return browser.storage.local.get();
+  })
+  .then((storage) => {
+    const enabled = storage.preferences.enabled;
+    const toCurr = storage.preferences.toCurr;
+    const currRates = storage.currRates || {};
 
-  chrome.storage.local.get('preferences', onGet);
+    setState(enabled);
+    setToCurr(toCurr);
+    refreshCurrRatesList(currRates);
+
+    browser.storage.onChanged.addListener(onStorageChange);
+  });
+
+stateBtnElem.addEventListener('click', () => {
+  browser.storage.local.get('preferences')
+    .then((storage) => {
+      const preferences = storage.preferences;
+      preferences.enabled = !preferences.enabled;
+
+      browser.storage.local.set({ preferences });
+    });
 });
 
-resBtnElem.addEventListener('click', function listener() {
-  chrome.storage.local.set({ currRates: {} });
+resBtnElem.addEventListener('click', () => {
+  browser.storage.local.set({ currRates: {} });
 });
 
-optionsBtnElem.addEventListener('click', function listener() {
-  chrome.runtime.openOptionsPage();
+optionsBtnElem.addEventListener('click', () => {
+  browser.runtime.openOptionsPage();
 });
 
-
-chrome.storage.local.get(null, function callback(storage) {
-  var enabled = storage.preferences.enabled;
-  var toCurr = storage.preferences.toCurr;
-  var currRates = storage.currRates || {};
-
-  setState(enabled);
-  setToCurr(toCurr);
-  refreshCurrRatesList(currRates);
-
-  chrome.storage.onChanged.addListener(onStorageChange);
-});
 
 function onStorageChange(changes) {
   if (changes.preferences) {
-    var oldPrefs = changes.preferences.oldValue;
-    var newPrefs = changes.preferences.newValue;
+    const oldPrefs = changes.preferences.oldValue;
+    const newPrefs = changes.preferences.newValue;
 
     if (oldPrefs.enabled !== newPrefs.enabled) setState(newPrefs.enabled);
     if (oldPrefs.toCurr !== newPrefs.toCurr) setToCurr(newPrefs.toCurr);
@@ -61,29 +63,12 @@ function setState(enabled) {
 }
 
 function setToCurr(curr) {
-  while (toCurrPElem.firstChild) {
-    toCurrPElem.removeChild(toCurrPElem.firstChild);
-  }
-
-  var strongElem = document.createElement('strong');
-  var brElem = document.createElement('br');
-  var textElem = document.createTextNode('');
-
   if (curr) {
-    var toCurr = toCurrOpts.filter(function filterToCurrOpt(toCurrOpt) {
-      return toCurrOpt.value === curr;
-    })[0] || null;
-
-    strongElem.textContent = 'Convert to:';
-    textElem.textContent = toCurr ? toCurr.label + ' (' + toCurr.value + ')' : curr;
+    const toCurr = toCurrOpts.find(toCurrOpt => toCurrOpt.value === curr) || null;
+    toCurrSpanElem.textContent = toCurr ? `${toCurr.label} (${toCurr.value})` : curr;
   } else {
-    strongElem.textContent = 'No set currency!';
-    textElem.textContent = 'Please select a currency on the options page.';
+    toCurrSpanElem.textContent = 'Please select a currency on the options page.';
   }
-
-  toCurrPElem.appendChild(strongElem);
-  toCurrPElem.appendChild(brElem);
-  toCurrPElem.appendChild(textElem);
 }
 
 function refreshCurrRatesList(currRates) {
@@ -91,25 +76,25 @@ function refreshCurrRatesList(currRates) {
     ratesUlElem.removeChild(ratesUlElem.firstChild);
   }
 
-  Object.keys(currRates).forEach(function callback(key) {
-    var currs = key.split('to');
-    var liElem = document.createElement('li');
+  Object.keys(currRates).forEach((key) => {
+    const currs = key.split('to');
+    const liElem = document.createElement('li');
 
     // span.curr - fromCurr to toCurr:
-    var currSpanElem = document.createElement('span');
+    const currSpanElem = document.createElement('span');
     currSpanElem.className = 'curr';
-    currSpanElem.textContent = currs[0] + ' to ' + currs[1] + ': ';
+    currSpanElem.textContent = `${currs[0]} to ${currs[1]}: `;
     liElem.appendChild(currSpanElem);
 
     // strong - currRate
-    var rateStrongElem = document.createElement('strong');
+    const rateStrongElem = document.createElement('strong');
     rateStrongElem.textContent = currRates[key].value;
     liElem.appendChild(rateStrongElem);
 
     liElem.appendChild(document.createElement('br'));
 
     // span.upd - lastUpdate
-    var updSpanElem = document.createElement('span');
+    const updSpanElem = document.createElement('span');
     updSpanElem.className = 'upd';
     updSpanElem.textContent = lastUpdate(currRates[key].updatedAt);
     liElem.appendChild(updSpanElem);
@@ -120,7 +105,7 @@ function refreshCurrRatesList(currRates) {
   if (ratesUlElem.childNodes.length === 0) {
     resBtnElem.style.display = 'none';
 
-    var liElem = document.createElement('li');
+    const liElem = document.createElement('li');
     liElem.textContent = 'No downloaded exchange rate yet.';
 
     ratesUlElem.appendChild(liElem);
@@ -129,19 +114,22 @@ function refreshCurrRatesList(currRates) {
   }
 }
 
-function lastUpdate(currRateLT) {
-  var lt = Date.now() - currRateLT;
+function lastUpdate(updatedAt) {
+  const updateDiff = Date.now() - updatedAt;
+  let updateTxt;
 
-  if (lt > 3600000) {
-    lt = Math.floor(lt / 3600000);
-    if (lt === 1) lt = 'more than ' + lt + ' hour';
-    else lt = 'more than ' + lt + ' hours';
+  if (updateDiff > 3600000) {
+    const hourDiff = Math.floor(updateDiff / 3600000);
+
+    updateTxt = `more than ${hourDiff} hour`;
+    if (hourDiff > 1) updateTxt += 's';
   } else {
-    lt = Math.floor(lt / 60000);
-    if (lt === 0) lt = 'less than a minute';
-    else if (lt === 1) lt += ' minute';
-    else lt += ' minutes';
+    const minDiff = Math.floor(updateDiff / 60000);
+
+    if (minDiff === 0) updateTxt = 'less than a minute';
+    else if (minDiff === 1) updateTxt = '1 minute';
+    else updateTxt = `${minDiff} minutes`;
   }
 
-  return '(updated ' + lt + ' ago)';
+  return `(updated ${updateTxt} ago)`;
 }
