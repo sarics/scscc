@@ -28,8 +28,6 @@ function onError(error) {
 // get storage
 browser.storage.local.get()
   .then((storage) => {
-    console.log('storage get', storage);
-
     const newStorage = {};
 
     if (storage.preferences && Object.keys(storage.preferences).length === Object.keys(preferences).length) {
@@ -49,10 +47,12 @@ browser.storage.local.get()
         }
       });
 
-      currRates = newCurrRates;
       if (Object.keys(storage.currRates).length !== Object.keys(newCurrRates).length) {
+        currRates = newCurrRates;
         newStorage.currRates = newCurrRates;
       }
+    } else {
+      newStorage.currRates = {};
     }
 
     if (Object.keys(newStorage).length) browser.storage.local.set(newStorage);
@@ -75,7 +75,8 @@ browser.storage.onChanged.addListener((changes) => {
 
 browser.runtime.onMessage.addListener(({ type, data }, sender, sendResponse) => {
   if (type === 'getStorage') {
-    return sendResponse({ preferences, currRates });
+    sendResponse({ preferences, currRates });
+    return false;
   }
 
   if (type === 'getCurrRate') {
@@ -124,15 +125,13 @@ function getCurrRate(fromCurr, toCurr) {
   const reqKey = `${fromCurr}to${toCurr}`;
 
   if (!requests[reqKey]) {
+    // if last update was within an hour, resolve
+    if (currRates[reqKey] && currRates[reqKey].value && currRates[reqKey].updatedAt && Date.now() - currRates[reqKey].updatedAt < 3600000) {
+      return Promise.resolve({ currRate: currRates[reqKey] });
+    }
+
     requests[reqKey] = new Promise((resolve) => {
-      // if last request was within an hour, resolve
-      if (currRates[reqKey] && currRates[reqKey].updatedAt && Date.now() - currRates[reqKey].updatedAt < 3600000) {
-        resolve({ currRate: currRates[reqKey] });
-        return;
-      }
-
-      console.log(`SCsCC - get ${fromCurr} to ${toCurr}`);
-
+      // console.log(`SCsCC - get ${fromCurr} to ${toCurr}`);
       const req = new XMLHttpRequest();
 
       const onEnd = function listener(event) {
@@ -140,6 +139,7 @@ function getCurrRate(fromCurr, toCurr) {
         const currRate = reqComplete(request, fromCurr, toCurr);
 
         resolve({ currRate });
+        requests[reqKey] = undefined;
       };
 
       req.addEventListener('load', onEnd);
@@ -147,10 +147,6 @@ function getCurrRate(fromCurr, toCurr) {
 
       req.open('GET', `https://www.google.com/search?q=1+${fromCurr}+to+${toCurr}&hl=en`, true);
       req.send();
-    })
-    .then((currRate) => {
-      requests[reqKey] = undefined;
-      return currRate;
     });
   }
 
@@ -170,29 +166,15 @@ function reqComplete(request, fromCurr, toCurr) {
     if (txtMatch && txtMatch[1]) {
       const newValue = parseFloat(txtMatch[1]);
 
-      if (isNaN(newValue)) {  // if match is not a number
-        console.log(`SCsCC - got ${fromCurr} to ${toCurr} text, but not a number`);
-      } else if (newValue === currRate.value) {  // if exchange rate didn't change (no refresh)
-        console.log(`SCsCC - got ${fromCurr} to ${toCurr}, exchange rate didn't change`,
-          currRate.value,
-          new Date(currRate.updatedAt).toUTCString());
-      } else {
-        console.log(`SCsCC - got ${fromCurr} to ${toCurr}: ${currRate.value} -> ${newValue}`,
-          new Date(currRate.updatedAt).toUTCString());
-
+      if (!isNaN(newValue) && newValue !== currRate.value) {
         showNotification(fromCurr, toCurr, newValue);
 
         currRate.value = newValue;
       }
-    } else {
-      console.log('SCsCC - got text, but regex match failed');
     }
   } else {
     // will try again if requested after 10 minues
     currRate.updatedAt = Date.now() - 3000000;
-
-    if (request) console.log('SCsCC - get error:', request.statusText, request.status);
-    else console.log('SCsCC - get error');
   }
 
   if (!currRates[reqKey] || currRates[reqKey].value !== currRate.value || currRates[reqKey].updatedAt !== currRate.updatedAt) {
@@ -215,7 +197,7 @@ function showNotification(fromCurr, toCurr, newValue) {
     iconUrl: icons.enabled[48],
   };
 
-  if (currRates[reqKey]) {  // on update
+  if (currRates[reqKey] && currRates[reqKey].value) {  // on update
     options.message = `${fromCurr} to ${toCurr} exchange rate updated:\n${currRates[reqKey].value} → ${newValue}`;
   } else {  // on frist get
     options.message = `${fromCurr} to ${toCurr} exchange rate got:\n${newValue}`;
