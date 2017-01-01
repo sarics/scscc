@@ -1,19 +1,19 @@
 window.SCSCC = window.SCSCC || {};
 
 (function SCSCC() {
-  var started = false;
-  var preferences = {};
-  var currRates = {};
-  var requests = {};
-  var observer;
-  var styleElem;
+  let started = false;
+  let preferences = {};
+  let currRates = {};
+  const requests = {};
+  let observer;
+  let styleElem;
 
-  var currPatts = [];
-  var numPatt = '(((\\d{1,3}((,|\\.|\\s)\\d{3})+|(\\d+))((\\.|,)\\d{1,9})?)|(\\.\\d{1,9}))(,--)?';
-  var symbPatts = {
+  const currPatts = [];
+  const numPatt = '(((\\d{1,3}((,|\\.|\\s)\\d{3})+|(\\d+))((\\.|,)\\d{1,9})?)|(\\.\\d{1,9}))(,--)?';
+  const symbPatts = {
     EUR: '(€|eur(os|o)?)',
     USD: '(\\$|usd)',
-    GBP: '(£|gbp)'
+    GBP: '(£|gbp)',
   };
 
   this.init = function init() {
@@ -36,26 +36,25 @@ window.SCSCC = window.SCSCC || {};
       '}';
 
     // build currPatts
-    Object.keys(symbPatts).forEach(function eachSymbPatt(fromCurr) {
-      var beforePatt = new RegExp(symbPatts[fromCurr] + '\\s?' + numPatt, 'gi');
-      var afterPatt = new RegExp(numPatt + '\\s?' + symbPatts[fromCurr], 'gi');
+    Object.keys(symbPatts).forEach((fromCurr) => {
+      const beforePatt = new RegExp(`${symbPatts[fromCurr]}\\s?${numPatt}`, 'gi');
+      const afterPatt = new RegExp(`${numPatt}\\s?${symbPatts[fromCurr]}`, 'gi');
 
       currPatts.push({ from: fromCurr, patt: beforePatt }, { from: fromCurr, patt: afterPatt });
     });
 
-    chrome.runtime.sendMessage({ type: 'getStorage' }, function callback(storage) {
+    chrome.runtime.sendMessage({ type: 'getStorage' }, (storage) => {
       preferences = storage.preferences;
       currRates = storage.currRates;
 
       if (preferences.enabled && preferences.toCurr) start();
 
-      chrome.runtime.onMessage.addListener(function onMessage(data) {
-        console.log('onMessage', data);
+      chrome.runtime.onMessage.addListener((data) => {
         if (data.preferences) {
-          var newPrefs = data.preferences;
-          var prefsChanged = false;
+          const newPrefs = data.preferences;
+          let prefsChanged = false;
 
-          Object.keys(newPrefs).forEach(function eachPrefName(prefName) {
+          Object.keys(newPrefs).forEach((prefName) => {
             if (!prefsChanged && newPrefs[prefName] !== preferences[prefName]) prefsChanged = true;
           });
 
@@ -63,11 +62,11 @@ window.SCSCC = window.SCSCC || {};
         }
 
         if (data.currRates) {
-          var newCurrRates = data.currRates;
-          var currRatesChanged = Object.keys(newCurrRates).length !== Object.keys(currRates).length;
+          const newCurrRates = data.currRates;
+          let currRatesChanged = Object.keys(newCurrRates).length !== Object.keys(currRates).length;
 
           if (!currRatesChanged) {
-            Object.keys(newCurrRates).forEach(function eachCurrKey(currKey) {
+            Object.keys(newCurrRates).forEach((currKey) => {
               if (!currRatesChanged && (!currRates[currKey] || newCurrRates[currKey].value !== currRates[currKey].value)) currRatesChanged = true;
             });
           }
@@ -86,7 +85,7 @@ window.SCSCC = window.SCSCC || {};
     // start the observer
     observer.observe(document.body, {
       childList: true,
-      subtree: true
+      subtree: true,
     });
 
     // add style
@@ -104,20 +103,20 @@ window.SCSCC = window.SCSCC || {};
 
     if (styleElem.parentNode) styleElem.parentNode.removeChild(styleElem);
 
-    var dataNodes = document.querySelectorAll('data.scscc');
-    dataNodes.forEach(function eachDataNode(dataNode) {
-      var replTxtNode = document.createTextNode(dataNode.title);
+    const dataNodes = document.querySelectorAll('data.scscc');
+    dataNodes.forEach((dataNode) => {
+      const replTxtNode = document.createTextNode(dataNode.title);
       dataNode.parentNode.replaceChild(replTxtNode, dataNode);
     });
   }
 
   function checkMutations(mutlist) {
-    var isDataScscc = function isDataScscc(node) {
+    const isDataScscc = function isDataScscc(node) {
       return /^data$/i.test(node.nodeName) && node.className === 'scscc';
     };
 
-    mutlist.forEach(function eachMut(mut) {
-      mut.addedNodes.forEach(function eachAddedNode(addedNode) {
+    mutlist.forEach((mut) => {
+      mut.addedNodes.forEach((addedNode) => {
         if (!addedNode.parentNode || isDataScscc(addedNode) || (addedNode.nodeType === 3 && isDataScscc(addedNode.parentNode))) return;
 
         replacePrices(addedNode);
@@ -142,8 +141,7 @@ window.SCSCC = window.SCSCC || {};
   }
 
   function refreshCurrRates(newCurrRates) {
-    console.log('refreshCurrRates');
-    var hasNewCurrRate = Object.keys(newCurrRates).length > Object.keys(currRates).length;
+    const hasNewCurrRate = Object.keys(newCurrRates).length > Object.keys(currRates).length;
     currRates = newCurrRates;
 
     if (!started) return;
@@ -154,31 +152,31 @@ window.SCSCC = window.SCSCC || {};
 
 
   function replacePrices(elem) {
-    var rootElem = elem || document.body;
+    const rootElem = elem || document.body;
 
-    var textNodes = getTextNodes(rootElem);
+    const textNodes = getTextNodes(rootElem);
     if (!textNodes.length) return;
 
-    var priceMatches = getPriceMatches(textNodes);
+    const priceMatches = getPriceMatches(textNodes);
     if (!priceMatches.length) return;
 
     replacePriceMatches(priceMatches);
   }
 
   function refreshPrices() {
-    var dataNodes = document.querySelectorAll('data.scscc');
+    const dataNodes = document.querySelectorAll('data.scscc');
 
-    dataNodes.forEach(function eachDataNode(dataNode) {
-      var fromCurr = dataNode.dataset.curr;
-      var currRate = getCurrRate(fromCurr);
-      var replTxtNode;
+    dataNodes.forEach((dataNode) => {
+      const fromCurr = dataNode.dataset.curr;
+      const currRate = getCurrRate(fromCurr);
+      let replTxtNode;
 
       if (fromCurr === preferences.toCurr || !currRate) {
         replTxtNode = document.createTextNode(dataNode.title);
         dataNode.parentNode.replaceChild(replTxtNode, dataNode);
       } else {
-        var newPrice = parseFloat(dataNode.value) * currRate;
-        var replTxt = formatPrice(newPrice);
+        const newPrice = parseFloat(dataNode.value) * currRate;
+        const replTxt = formatPrice(newPrice);
 
         if (dataNode.textContent !== newPrice) {
           replTxtNode = document.createTextNode(replTxt);
@@ -191,9 +189,9 @@ window.SCSCC = window.SCSCC || {};
 
   // get all text nodes of a given node
   function getTextNodes(node) {
-    var textNodes = [];
-    var ignoreNodes = /^(script|style|pre)$/i;
-    var patt = new RegExp(numPatt);
+    const textNodes = [];
+    const ignoreNodes = /^(script|style|pre)$/i;
+    const patt = new RegExp(numPatt);
 
     function getChildTextNodes(n) {
       if (ignoreNodes.test(n.nodeName) || n.className === 'scscc') return;
@@ -213,16 +211,16 @@ window.SCSCC = window.SCSCC || {};
 
   // check if there is any pattern match in a text node and return the matches
   function getPriceMatches(textNodes) {
-    var priceMatches = [];
+    const priceMatches = [];
 
-    textNodes.forEach(function eachTextNode(textNode) {
-      var txt = textNode.nodeValue;
-      var matches = {};
+    textNodes.forEach((textNode) => {
+      const txt = textNode.nodeValue;
+      const matches = {};
 
-      currPatts.forEach(function eachCurrPatt(currPatt) {
+      currPatts.forEach((currPatt) => {
         if (currPatt.from === preferences.toCurr) return;
 
-        var match = txt.match(currPatt.patt);
+        const match = txt.match(currPatt.patt);
         if (match) {
           matches[currPatt.from] = (matches[currPatt.from] || []).concat(match);
         }
@@ -231,123 +229,126 @@ window.SCSCC = window.SCSCC || {};
       if (Object.keys(matches).length) {
         priceMatches.push({
           node: textNode,
-          matches: matches
+          matches,
         });
+      } else {
+        const specMatches = checkSiblingMatches(textNode);
+
+        if (Object.keys(specMatches).length) {
+          priceMatches.push({
+            node: textNode,
+            matches: specMatches,
+          });
+        }
       }
-      // else {
-      //   var specMatches = checkSiblings(textNode);
-      //
-      //   if (Object.keys(specMatches).length) {
-      //     priceMatches.push({
-      //       node: textNode,
-      //       matches: specMatches
-      //     });
-      //   }
-      // }
     });
 
     return priceMatches;
   }
 
-  // check if currency symbol is in an other node
-  // function checkSiblings(textNode) {
-  //   var chckTxt = {};
-  //   var matches = {};
-  //   var txt = textNode.nodeValue;
-  //
-  //   var match = txt.match(new RegExp(numPatt, 'g'));
-  //   if (match.length !== 1 || match[0] !== txt.trim()) return matches;
-  //
-  //   // check previous sibling of
-  //   if (textNode.previousSibling && textNode.previousSibling.lastChild && textNode.previousSibling.lastChild.nodeType === 3) {
-  //     // this node -> check sibling's last child
-  //     chckTxt.prev = textNode.previousSibling.lastChild.nodeValue.trim();
-  //   } else if (textNode.parentNode.previousSibling) {
-  //     // parent node
-  //     if (textNode.parentNode.previousSibling.nodeType === 3) {
-  //       // if text node
-  //       chckTxt.prev = textNode.parentNode.previousSibling.nodeValue.trim();
-  //     } else if (textNode.parentNode.previousSibling.lastChild && textNode.parentNode.previousSibling.lastChild.nodeType === 3) {
-  //       // if not text node -> check last child
-  //       chckTxt.prev = textNode.parentNode.previousSibling.lastChild.nodeValue.trim();
-  //     }
-  //   }
-  //
-  //   // check next sibling of
-  //   if (textNode.nextSibling && textNode.nextSibling.firstChild && textNode.nextSibling.firstChild.nodeType === 3) {
-  //     // this node -> check sibling's first child
-  //     chckTxt.next = textNode.nextSibling.firstChild.nodeValue.trim();
-  //   } else if (textNode.parentNode.nextSibling) {
-  //     // parent node
-  //     if (textNode.parentNode.nextSibling.nodeType === 3) {
-  //       // if text node
-  //       chckTxt.next = textNode.parentNode.nextSibling.nodeValue.trim();
-  //     } else if (textNode.parentNode.nextSibling.firstChild && textNode.parentNode.nextSibling.firstChild.nodeType === 3) {
-  //       // if not text node -> check first child
-  //       chckTxt.next = textNode.parentNode.nextSibling.firstChild.nodeValue.trim();
-  //     }
-  //   }
-  //
-  //   Object.keys(chckTxt).forEach(function eachPos(pos) {
-  //     if (!chckTxt[pos]) return;
-  //
-  //     Object.keys(symbPatts).forEach(function eachFromCurr(fromCurr) {
-  //       if (fromCurr === preferences.toCurr) return;
-  //
-  //       var symbPatt;
-  //       if (pos === 'prev') symbPatt = new RegExp(symbPatts[fromCurr] + '$', 'gi');
-  //       else symbPatt = new RegExp('^' + symbPatts[fromCurr], 'gi');
-  //
-  //       if (symbPatt.test(chckTxt[pos])) {
-  //         matches[fromCurr] = match;
-  //       }
-  //     });
-  //   });
-  //
-  //   return matches;
-  // }
+  // check if currency symbol is in an other sibling node
+  function checkSiblingMatches(textNode) {
+    const chckTxt = {};
+    const matches = {};
+    const txt = textNode.nodeValue;
+
+    const match = txt.match(new RegExp(numPatt, 'g'));
+    if (match.length !== 1 || match[0] !== txt.trim()) return matches;
+
+    const prevSibling = textNode.previousSibling;
+    const parentPrevSibling = textNode.parentNode.previousSibling;
+    // check previous sibling of
+    if (prevSibling && prevSibling.lastChild && prevSibling.lastChild.nodeType === 3) {
+      // this node -> check sibling's last child
+      chckTxt.prev = prevSibling.lastChild.nodeValue.trim();
+    } else if (parentPrevSibling) {
+      // parent node
+      if (parentPrevSibling.nodeType === 3) {
+        // if text node
+        chckTxt.prev = parentPrevSibling.nodeValue.trim();
+      } else if (parentPrevSibling.lastChild && parentPrevSibling.lastChild.nodeType === 3) {
+        // if not text node -> check last child
+        chckTxt.prev = parentPrevSibling.lastChild.nodeValue.trim();
+      }
+    }
+
+    const nextSibling = textNode.nextSibling;
+    const parentNextSibling = textNode.parentNode.nextSibling;
+    // check next sibling of
+    if (nextSibling && nextSibling.firstChild && nextSibling.firstChild.nodeType === 3) {
+      // this node -> check sibling's first child
+      chckTxt.next = nextSibling.firstChild.nodeValue.trim();
+    } else if (parentNextSibling) {
+      // parent node
+      if (parentNextSibling.nodeType === 3) {
+        // if text node
+        chckTxt.next = parentNextSibling.nodeValue.trim();
+      } else if (parentNextSibling.firstChild && parentNextSibling.firstChild.nodeType === 3) {
+        // if not text node -> check first child
+        chckTxt.next = parentNextSibling.firstChild.nodeValue.trim();
+      }
+    }
+
+    Object.keys(chckTxt).forEach((pos) => {
+      if (!chckTxt[pos].length) return;
+
+      Object.keys(symbPatts).forEach((fromCurr) => {
+        if (fromCurr === preferences.toCurr) return;
+
+        // let symbPatt;
+        // if (pos === 'prev') symbPatt = new RegExp(`${symbPatts[fromCurr]}$`, 'gi');
+        // else symbPatt = new RegExp(`^${symbPatts[fromCurr]}`, 'gi');
+        const symbPatt = new RegExp(`^${symbPatts[fromCurr]}$`, 'gi');
+
+        if (symbPatt.test(chckTxt[pos])) {
+          matches[fromCurr] = match;
+        }
+      });
+    });
+
+    return matches;
+  }
 
 
   function replacePriceMatches(priceMatches) {
-    priceMatches.forEach(function eachCurrMatch(currMatch) {
-      var dataNodes = getDataNodes(currMatch.node, currMatch.matches);
+    priceMatches.forEach((priceMatch) => {
+      const dataNodes = getDataNodes(priceMatch.node, priceMatch.matches);
       if (!dataNodes.length) return;
 
-      replaceText(currMatch.node, dataNodes);
+      replaceText(priceMatch.node, dataNodes);
     });
   }
 
 
   // find and convert the prices in the text, and return them as data nodes
   function getDataNodes(node, matches) {
-    var txt = node.nodeValue;
-    var dataNodes = [];
+    const txt = node.nodeValue;
+    const dataNodes = [];
 
-    Object.keys(matches).forEach(function eachFromCurr(fromCurr) {
-      var currRate = getCurrRate(fromCurr);
+    Object.keys(matches).forEach((fromCurr) => {
+      const currRate = getCurrRate(fromCurr);
       if (!currRate) return;
 
-      matches[fromCurr].forEach(function eachMatch(match) {
-        var repl;
-        var dataNode = document.createElement('data');
+      matches[fromCurr].forEach((match) => {
+        const dataNode = document.createElement('data');
         dataNode.className = 'scscc';
         dataNode.dataset.curr = fromCurr;
 
+        let replTxt;
         if (txt.trim() !== match) {
-          repl = checkSpecCases(txt, match, fromCurr);
-          if (!repl) return;
+          replTxt = checkSpecCases(txt, match, fromCurr);
         } else {
-          repl = match;
+          replTxt = match;
         }
+        if (!replTxt) return;
 
-        dataNode.title = repl;
+        dataNode.title = replTxt;
 
-        repl = cleanPrice(repl);
-        dataNode.value = repl;
+        const price = cleanPrice(replTxt);
+        dataNode.value = price;
 
-        repl = parseFloat(repl) * currRate;
-        repl = formatPrice(repl);
-        dataNode.textContent = repl;
+        const newPrice = parseFloat(price) * currRate;
+        dataNode.textContent = formatPrice(newPrice);
 
         dataNodes.push(dataNode);
       });
@@ -357,13 +358,13 @@ window.SCSCC = window.SCSCC || {};
   }
 
   function getCurrRate(fromCurr) {
-    var reqKey = fromCurr + 'to' + preferences.toCurr;
-    var currRate = currRates[reqKey] ? currRates[reqKey].value : null;
+    const reqKey = `${fromCurr}to${preferences.toCurr}`;
+    const currRate = currRates[reqKey] ? currRates[reqKey].value : null;
 
     if (!requests[reqKey]) {
       requests[reqKey] = true;
 
-      chrome.runtime.sendMessage({ type: 'getCurrRate', data: { from: fromCurr, to: preferences.toCurr } }, function callback() {
+      chrome.runtime.sendMessage({ type: 'getCurrRate', data: { from: fromCurr, to: preferences.toCurr } }, () => {
         requests[reqKey] = false;
       });
     }
@@ -372,9 +373,9 @@ window.SCSCC = window.SCSCC || {};
   }
 
   function checkSpecCases(txt, match, from) {
-    var chckchar;
-    var charind = txt.indexOf(match);
-    var checkedMatch = match;
+    let chckchar;
+    const charind = txt.indexOf(match);
+    let checkedMatch = match;
 
     // skip other dollars
     // Australian (A$)
@@ -414,7 +415,7 @@ window.SCSCC = window.SCSCC || {};
     // in case text is like: masseur 1234
     // or
     // in case text is like: 1234 europe
-    var sind = match.search(/eur|usd|gbp/i);
+    const sind = match.search(/eur|usd|gbp/i);
     if (sind !== -1) {
       if (sind === 0) { // starts with eur(os)/usd/gbp
         // if there is any word character before it, skip it
@@ -442,7 +443,7 @@ window.SCSCC = window.SCSCC || {};
   // make price computer-readable: remove price symbols, and replace/remove separators
   function cleanPrice(repl) {
     // remove currency symbols and spaces
-    var cleanedPrice = repl.replace(/€|eur(os|o)?|\$|usd|£|gbp|,--|\s/ig, '');
+    let cleanedPrice = repl.replace(/€|eur(os|o)?|\$|usd|£|gbp|,--|\s/ig, '');
 
     // if no decimal separator
     // remove possible "." or "," thousand separators
@@ -462,16 +463,16 @@ window.SCSCC = window.SCSCC || {};
   }
 
   // format the price according to user prefs
-  function formatPrice(repl) {
+  function formatPrice(price) {
     // set rounding
-    var formattedPrice = (preferences.round) ? repl.toFixed(0) : repl.toFixed(2);
+    let formattedPrice = (preferences.round) ? price.toFixed(0) : price.toFixed(2);
 
     // set decimal separator
     if (preferences.sepDec !== '.') formattedPrice = formattedPrice.replace('.', preferences.sepDec);
 
     // set thousand separator
     if (preferences.sepTho !== '') {
-      for (var i = ((preferences.round) ? formattedPrice.length : formattedPrice.indexOf(preferences.sepDec)) - 3; i > 0; i -= 3) {
+      for (let i = ((preferences.round) ? formattedPrice.length : formattedPrice.indexOf(preferences.sepDec)) - 3; i > 0; i -= 3) {
         formattedPrice = formattedPrice.slice(0, i) + preferences.sepTho + formattedPrice.slice(i);
       }
     }
@@ -489,25 +490,25 @@ window.SCSCC = window.SCSCC || {};
 
   // replace the prices in the text node with the converted data nodes
   function replaceText(node, dataNodes) {
-    var parentNode = node.parentNode;
-    var tmpDivElem = document.createElement('div');
+    const parentNode = node.parentNode;
+    const tmpDivElem = document.createElement('div');
     tmpDivElem.appendChild(node.cloneNode());
 
-    dataNodes.forEach(function eachDataNode(dataNode) {
-      var replTxt = dataNode.title;
-      var replaced = false;
+    dataNodes.forEach((dataNode) => {
+      const replTxt = dataNode.title;
+      let replaced = false;
 
-      tmpDivElem.childNodes.forEach(function eachChildNode(childNode) {
+      tmpDivElem.childNodes.forEach((childNode) => {
         if (replaced || childNode.nodeType !== 3) return;
 
-        var nodeTxt = childNode.nodeValue;
-        var matchInd = nodeTxt.indexOf(replTxt);
+        const nodeTxt = childNode.nodeValue;
+        const matchInd = nodeTxt.indexOf(replTxt);
 
         if (matchInd === -1) return;
 
-        var tmpTxt;
-        var tmpTxtNode;
-        var replDivElem = document.createElement('div');
+        let tmpTxt;
+        let tmpTxtNode;
+        const replDivElem = document.createElement('div');
 
         if (matchInd > 0) {
           tmpTxt = nodeTxt.slice(0, matchInd);
