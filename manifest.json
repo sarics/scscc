@@ -26,15 +26,14 @@
 
   "background": {
     "scripts": [
-      "background_scripts/options.js",
-      "background_scripts/background.js"
+      "dist/background.js"
     ]
   },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/scscc.js"]
+      "js": ["dist/content.js"]
     }
   ],
 

@@ -1,3 +1,5 @@
+import options from './options';
+
 const manifest = browser.runtime.getManifest();
 const requests = {};
 const icons = {
@@ -17,12 +19,12 @@ let preferences = { enabled: true };
 let currRates = {};
 
 // set default preferences
-window.OPTIONS.forEach((option) => {
+options.forEach((option) => {
   preferences[option.name] = option.value;
 });
 
 function onError(error) {
-  console.log('SCsCC - error:', error.message);
+  console.error('SCsCC - error:', error.message);
 }
 
 // get storage
@@ -191,17 +193,17 @@ function showNotification(fromCurr, toCurr, newValue) {
   if (!preferences.noti) return;
 
   const reqKey = `${fromCurr}to${toCurr}`;
-  const options = {
+  const opts = {
     type: 'basic',
     title: manifest.name,
     iconUrl: icons.enabled[48],
   };
 
   if (currRates[reqKey] && currRates[reqKey].value) {  // on update
-    options.message = `${fromCurr} to ${toCurr} exchange rate updated:\n${currRates[reqKey].value} → ${newValue}`;
+    opts.message = `${fromCurr} to ${toCurr} exchange rate updated:\n${currRates[reqKey].value} → ${newValue}`;
   } else {  // on frist get
-    options.message = `${fromCurr} to ${toCurr} exchange rate got:\n${newValue}`;
+    opts.message = `${fromCurr} to ${toCurr} exchange rate got:\n${newValue}`;
   }
 
-  browser.notifications.create(options);
+  browser.notifications.create(opts);
 }

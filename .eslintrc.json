@@ -6,6 +6,7 @@
   },
   "globals": {},
   "rules": {
+    "arrow-parens": ["error", "always"],
     "max-len": "off",
     "no-console": "off",
     "no-use-before-define": ["error", { "functions": false }],
