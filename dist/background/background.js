@@ -63,11 +63,14 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -428,15 +431,88 @@ exports.default = [{
 }];
 
 /***/ }),
-/* 1 */
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "icons/icon16.png";
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "icons/icon16_off.png";
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "icons/icon32.png";
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "icons/icon32_off.png";
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "icons/icon48.png";
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "icons/icon48_off.png";
+
+/***/ }),
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _options = __webpack_require__(0);
+var _options = __webpack_require__(3);
 
 var _options2 = _interopRequireDefault(_options);
+
+var _icon = __webpack_require__(9);
+
+var _icon2 = _interopRequireDefault(_icon);
+
+var _icon3 = __webpack_require__(11);
+
+var _icon4 = _interopRequireDefault(_icon3);
+
+var _icon5 = __webpack_require__(13);
+
+var _icon6 = _interopRequireDefault(_icon5);
+
+var _icon16_off = __webpack_require__(10);
+
+var _icon16_off2 = _interopRequireDefault(_icon16_off);
+
+var _icon32_off = __webpack_require__(12);
+
+var _icon32_off2 = _interopRequireDefault(_icon32_off);
+
+var _icon48_off = __webpack_require__(14);
+
+var _icon48_off2 = _interopRequireDefault(_icon48_off);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -444,14 +520,14 @@ var manifest = browser.runtime.getManifest();
 var requests = {};
 var icons = {
   enabled: {
-    16: browser.runtime.getURL('icons/icon16.png'),
-    32: browser.runtime.getURL('icons/icon32.png'),
-    48: browser.runtime.getURL('icons/icon48.png')
+    16: browser.runtime.getURL(_icon2.default),
+    32: browser.runtime.getURL(_icon4.default),
+    48: browser.runtime.getURL(_icon6.default)
   },
   disabled: {
-    16: browser.runtime.getURL('icons/icon16_off.png'),
-    32: browser.runtime.getURL('icons/icon32_off.png'),
-    48: browser.runtime.getURL('icons/icon48_off.png')
+    16: browser.runtime.getURL(_icon16_off2.default),
+    32: browser.runtime.getURL(_icon32_off2.default),
+    48: browser.runtime.getURL(_icon48_off2.default)
   }
 };
 
@@ -459,6 +535,7 @@ var preferences = { enabled: true };
 var currRates = {};
 
 // set default preferences
+window.OPTIONS = _options2.default;
 _options2.default.forEach(option => {
   preferences[option.name] = option.value;
 });

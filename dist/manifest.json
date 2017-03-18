@@ -26,14 +26,14 @@
 
   "background": {
     "scripts": [
-      "dist/background.js"
+      "background/background.js"
     ]
   },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/content.js"]
+      "js": ["content/content.js"]
     }
   ],
 

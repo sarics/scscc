@@ -1,17 +1,24 @@
 import options from './options';
 
+import icon16 from '../icons/icon16.png';
+import icon32 from '../icons/icon32.png';
+import icon48 from '../icons/icon48.png';
+import icon16Off from '../icons/icon16_off.png';
+import icon32Off from '../icons/icon32_off.png';
+import icon48Off from '../icons/icon48_off.png';
+
 const manifest = browser.runtime.getManifest();
 const requests = {};
 const icons = {
   enabled: {
-    16: browser.runtime.getURL('icons/icon16.png'),
-    32: browser.runtime.getURL('icons/icon32.png'),
-    48: browser.runtime.getURL('icons/icon48.png'),
+    16: browser.runtime.getURL(icon16),
+    32: browser.runtime.getURL(icon32),
+    48: browser.runtime.getURL(icon48),
   },
   disabled: {
-    16: browser.runtime.getURL('icons/icon16_off.png'),
-    32: browser.runtime.getURL('icons/icon32_off.png'),
-    48: browser.runtime.getURL('icons/icon48_off.png'),
+    16: browser.runtime.getURL(icon16Off),
+    32: browser.runtime.getURL(icon32Off),
+    48: browser.runtime.getURL(icon48Off),
   },
 };
 
@@ -19,6 +26,7 @@ let preferences = { enabled: true };
 let currRates = {};
 
 // set default preferences
+window.OPTIONS = options;
 options.forEach((option) => {
   preferences[option.name] = option.value;
 });

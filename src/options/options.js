@@ -1,3 +1,6 @@
+import './options.html';
+import './options.css';
+
 let options;
 
 browser.runtime.getBackgroundPage()

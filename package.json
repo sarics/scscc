@@ -7,7 +7,8 @@
   "license": "GPL-2.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --watch"
+    "start": "webpack --watch",
+    "build": "webpack"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -16,6 +17,7 @@
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
+    "file-loader": "^0.10.1",
     "webpack": "^2.2.1"
   }
 }

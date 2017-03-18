@@ -1,3 +1,6 @@
+import './popup.html';
+import './popup.css';
+
 const resBtnElem = document.querySelector('#reset');
 const stateBtnElem = document.querySelector('#state');
 const optionsBtnElem = document.querySelector('#options');
@@ -8,7 +11,7 @@ let toCurrOpts;
 
 browser.runtime.getBackgroundPage()
   .then((bgWindow) => {
-    const toCurrOpt = bgWindow.OPTIONS.find(opt => opt.name === 'toCurr') || {};
+    const toCurrOpt = bgWindow.OPTIONS.find((opt) => opt.name === 'toCurr') || {};
     toCurrOpts = toCurrOpt.options || [];
 
     return browser.storage.local.get();
@@ -64,7 +67,7 @@ function setState(enabled) {
 
 function setToCurr(curr) {
   if (curr) {
-    const toCurr = toCurrOpts.find(toCurrOpt => toCurrOpt.value === curr) || null;
+    const toCurr = toCurrOpts.find((toCurrOpt) => toCurrOpt.value === curr) || null;
     toCurrSpanElem.textContent = toCurr ? `${toCurr.label} (${toCurr.value})` : curr;
   } else {
     toCurrSpanElem.textContent = 'Please select a currency on the options page.';
