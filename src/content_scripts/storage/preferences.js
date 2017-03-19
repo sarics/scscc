@@ -1,45 +1,29 @@
-const listeners = [];
+import { addListener, removeListener, callListeners } from '../utils/listenerHelper';
+
+let listeners = [];
 let preferences = {};
 
-const callListeners = (data) => listeners.forEach((cb) => cb(data));
-
-chrome.runtime.sendMessage({ type: 'getStorage' }, (storage) => {
-  preferences = storage.preferences;
-  callListeners(preferences);
-
-  chrome.runtime.onMessage.addListener((data) => {
-    if (!data.preferences) return;
-
-    const newPrefs = data.preferences;
-    let prefsChanged = false;
-
-    Object.keys(newPrefs).forEach((prefName) => {
-      if (!prefsChanged && newPrefs[prefName] !== preferences[prefName]) prefsChanged = true;
-    });
-
-    if (prefsChanged) {
-      preferences = newPrefs;
-      callListeners(preferences);
-    }
+browser.storage.local.get('preferences')
+  .then(({ preferences: data }) => {
+    preferences = data;
+    callListeners(listeners, preferences);
   });
+
+browser.storage.onChanged.addListener((changes) => {
+  if (changes.preferences && changes.preferences.newValue) {
+    preferences = changes.preferences.newValue;
+    callListeners(listeners, preferences);
+  }
 });
 
-const get = (key) => {
-  if (key) return preferences[key];
-  return preferences;
-};
+const get = (key) => (key ? preferences[key] : preferences);
 
 const onChange = (cb) => {
-  if (listeners.indexOf(cb) === -1) listeners.push(cb);
+  listeners = addListener(listeners, cb);
 };
 
 const offChange = (cb) => {
-  if (cb) {
-    const cbInd = listeners.indexOf(cb);
-    if (cbInd !== -1) listeners.splice(cbInd, 1);
-  } else {
-    listeners.splice(0, listeners.length);
-  }
+  listeners = removeListener(listeners, cb);
 };
 
 export default {
