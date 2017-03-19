@@ -30,7 +30,7 @@ export default (currRates, fromCurr, toCurr) => {
   if (!requests[reqKey]) {
     // if last update was within an hour, resolve
     if (currRates[reqKey] && currRates[reqKey].value && currRates[reqKey].updatedAt && Date.now() - currRates[reqKey].updatedAt < 3600000) {
-      return Promise.resolve({ currRate: currRates[reqKey] });
+      return Promise.resolve(currRates[reqKey]);
     }
 
     requests[reqKey] = new Promise((resolve) => {
