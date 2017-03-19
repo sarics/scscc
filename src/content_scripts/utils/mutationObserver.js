@@ -20,6 +20,6 @@ export default (onMutation) => {
         subtree: true,
       }),
 
-    disconnect: observer.disconnect,
+    disconnect: () => observer.disconnect(),
   };
 };
