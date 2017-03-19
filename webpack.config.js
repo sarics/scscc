@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -40,4 +41,12 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: 'manifest.json',
+      },
+    ]),
+  ],
 };
