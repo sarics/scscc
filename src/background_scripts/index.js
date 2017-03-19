@@ -79,24 +79,27 @@ browser.storage.onChanged.addListener((changes) => {
 });
 
 
+const checkCurrRate = (currRate, fromCurr, toCurr) => {
+  const reqKey = `${fromCurr}to${toCurr}`;
+
+  if (!currRates[reqKey] || currRates[reqKey].value !== currRate.value || currRates[reqKey].updatedAt !== currRate.updatedAt) {
+    if (preferences.noti) {
+      const oldValue = (currRates[reqKey] && currRates[reqKey].value) || null;
+      showNotification(fromCurr, toCurr, oldValue, currRate.value);
+    }
+
+    const newCurrRates = Object.assign({}, currRates, { [reqKey]: currRate });
+    browser.storage.local.set({ currRates: newCurrRates });
+  }
+};
+
 browser.runtime.onMessage.addListener(({ type, data }) => {
   if (type === 'getCurrRate') {
     const { from: fromCurr, to: toCurr } = data;
 
     return getCurrRate(currRates, fromCurr, toCurr)
       .then((currRate) => {
-        const reqKey = `${fromCurr}to${toCurr}`;
-
-        if (!currRates[reqKey] || currRates[reqKey].value !== currRate.value || currRates[reqKey].updatedAt !== currRate.updatedAt) {
-          if (preferences.noti) {
-            const oldValue = (currRates[reqKey] && currRates[reqKey].value) || null;
-            showNotification(fromCurr, toCurr, oldValue, currRate.value);
-          }
-
-          const newCurrRates = Object.assign({}, currRates, { [reqKey]: currRate });
-          browser.storage.local.set({ currRates: newCurrRates });
-        }
-
+        checkCurrRate(currRate, fromCurr, toCurr);
         return currRate;
       });
   }
