@@ -2,23 +2,16 @@ import options from './options';
 import getCurrRate from './utils/getCurrRate';
 import showNotification from './utils/showNotification';
 
-import icon16 from '../icons/icon16.png';
-import icon32 from '../icons/icon32.png';
-import icon48 from '../icons/icon48.png';
-import icon16Off from '../icons/icon16_off.png';
-import icon32Off from '../icons/icon32_off.png';
-import icon48Off from '../icons/icon48_off.png';
-
 const icons = {
   enabled: {
-    16: browser.runtime.getURL(icon16),
-    32: browser.runtime.getURL(icon32),
-    48: browser.runtime.getURL(icon48),
+    16: browser.runtime.getURL('icons/icon16.png'),
+    32: browser.runtime.getURL('icons/icon32.png'),
+    48: browser.runtime.getURL('icons/icon48.png'),
   },
   disabled: {
-    16: browser.runtime.getURL(icon16Off),
-    32: browser.runtime.getURL(icon32Off),
-    48: browser.runtime.getURL(icon48Off),
+    16: browser.runtime.getURL('icons/icon16_off.png'),
+    32: browser.runtime.getURL('icons/icon32_off.png'),
+    48: browser.runtime.getURL('icons/icon48_off.png'),
   },
 };
 
@@ -92,7 +85,6 @@ browser.runtime.onMessage.addListener(({ type, data }) => {
 
     return getCurrRate(currRates, fromCurr, toCurr)
       .then((currRate) => {
-        console.log(fromCurr, toCurr, currRate);
         const reqKey = `${fromCurr}to${toCurr}`;
 
         if (!currRates[reqKey] || currRates[reqKey].value !== currRate.value || currRates[reqKey].updatedAt !== currRate.updatedAt) {
