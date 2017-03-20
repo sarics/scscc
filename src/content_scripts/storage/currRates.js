@@ -29,7 +29,6 @@ const get = (fromCurr, toCurr) => {
     requests[reqKey] = true;
 
     browser.runtime.sendMessage({ type: 'getCurrRate', data }, (resp) => {
-      console.log('getCurrRate resp', resp);
       requests[reqKey] = false;
     });
   }

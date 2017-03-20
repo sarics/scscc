@@ -33,6 +33,10 @@ const stop = () => {
   resetPrices();
 };
 
+const refresh = () => {
+  if (!document.hidden) refreshPrices();
+};
+
 
 preferences.onChange((newPrefs) => {
   if (!newPrefs.enabled || !newPrefs.toCurr) {
@@ -44,13 +48,15 @@ preferences.onChange((newPrefs) => {
     if (newPrefs.style) style.add();
     else style.remove();
 
-    refreshPrices();
+    refresh();
   } else start();
 });
 
 currRates.onChange((newCurrRates, hasNew) => {
   if (!started) return;
 
-  refreshPrices();
+  refresh();
   if (hasNew) replacePrices();
 });
+
+document.addEventListener('visibilitychange', refresh);
