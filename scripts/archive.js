@@ -13,21 +13,20 @@ const onError = (err) => {
 };
 
 const createArchive = (err) => {
-  if (err) onError(err);
+  if (err && err.code !== 'EEXIST') onError(err);
 
   const outFile = `scscc-v${manifest.version}.zip`;
   const output = fs.createWriteStream(path.join(outPath, outFile));
   const archive = archiver('zip', {
     zlib: { level: 9 },
   });
+  archive.pipe(output);
 
   output.on('close', () => {
     console.log('DONE:', archive.pointer(), 'total bytes');
   });
 
   archive.on('error', onError);
-
-  archive.pipe(output);
 
   archive.glob('**/*', { cwd: inPath });
 
