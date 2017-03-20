@@ -1,4 +1,4 @@
-window.OPTIONS = [
+export default [
   {
     title: 'Convert to',
     name: 'toCurr',
@@ -7,385 +7,385 @@ window.OPTIONS = [
     options: [
       {
         value: '',
-        label: 'Please select a currency'
+        label: 'Please select a currency',
       },
       {
         value: 'DZD',
-        label: 'Algerian Dinar'
+        label: 'Algerian Dinar',
       },
       {
         value: 'ARS',
-        label: 'Argentine Peso'
+        label: 'Argentine Peso',
       },
       {
         value: 'AUD',
-        label: 'Australian Dollar'
+        label: 'Australian Dollar',
       },
       {
         value: 'BHD',
-        label: 'Bahraini Dinar'
+        label: 'Bahraini Dinar',
       },
       {
         value: 'BOB',
-        label: 'Bolivian Boliviano'
+        label: 'Bolivian Boliviano',
       },
       {
         value: 'BWP',
-        label: 'Botswanan Pula'
+        label: 'Botswanan Pula',
       },
       {
         value: 'BRL',
-        label: 'Brazilian Real'
+        label: 'Brazilian Real',
       },
       {
         value: 'GBP',
-        label: 'British Pound Sterling'
+        label: 'British Pound Sterling',
       },
       {
         value: 'BND',
-        label: 'Brunei Dollar'
+        label: 'Brunei Dollar',
       },
       {
         value: 'BGN',
-        label: 'Bulgarian Lev'
+        label: 'Bulgarian Lev',
       },
       {
         value: 'CAD',
-        label: 'Canadian Dollar'
+        label: 'Canadian Dollar',
       },
       {
         value: 'KYD',
-        label: 'Cayman Islands Dollar'
+        label: 'Cayman Islands Dollar',
       },
       {
         value: 'XOF',
-        label: 'CFA Franc BCEAO'
+        label: 'CFA Franc BCEAO',
       },
       {
         value: 'CLP',
-        label: 'Chilean Peso'
+        label: 'Chilean Peso',
       },
       {
         value: 'CNY',
-        label: 'Chinese Yuan'
+        label: 'Chinese Yuan',
       },
       {
         value: 'COP',
-        label: 'Colombian Peso'
+        label: 'Colombian Peso',
       },
       {
         value: 'CRC',
-        label: 'Costa Rican Colón'
+        label: 'Costa Rican Colón',
       },
       {
         value: 'HRK',
-        label: 'Croatian Kuna'
+        label: 'Croatian Kuna',
       },
       {
         value: 'CZK',
-        label: 'Czech Republic Koruna'
+        label: 'Czech Republic Koruna',
       },
       {
         value: 'DKK',
-        label: 'Danish Krone'
+        label: 'Danish Krone',
       },
       {
         value: 'DOP',
-        label: 'Dominican Peso'
+        label: 'Dominican Peso',
       },
       {
         value: 'EGP',
-        label: 'Egyptian Pound'
+        label: 'Egyptian Pound',
       },
       {
         value: 'EEK',
-        label: 'Estonian Kroon'
+        label: 'Estonian Kroon',
       },
       {
         value: 'EUR',
-        label: 'Euro'
+        label: 'Euro',
       },
       {
         value: 'FJD',
-        label: 'Fijian Dollar'
+        label: 'Fijian Dollar',
       },
       {
         value: 'HNL',
-        label: 'Honduran Lempira'
+        label: 'Honduran Lempira',
       },
       {
         value: 'HKD',
-        label: 'Hong Kong Dollar'
+        label: 'Hong Kong Dollar',
       },
       {
         value: 'HUF',
-        label: 'Hungarian Forint'
+        label: 'Hungarian Forint',
       },
       {
         value: 'INR',
-        label: 'Indian Rupee'
+        label: 'Indian Rupee',
       },
       {
         value: 'IDR',
-        label: 'Indonesian Rupiah'
+        label: 'Indonesian Rupiah',
       },
       {
         value: 'ILS',
-        label: 'Israeli New Sheqel'
+        label: 'Israeli New Sheqel',
       },
       {
         value: 'JMD',
-        label: 'Jamaican Dollar'
+        label: 'Jamaican Dollar',
       },
       {
         value: 'JPY',
-        label: 'Japanese Yen'
+        label: 'Japanese Yen',
       },
       {
         value: 'JOD',
-        label: 'Jordanian Dinar'
+        label: 'Jordanian Dinar',
       },
       {
         value: 'KZT',
-        label: 'Kazakhstani Tenge'
+        label: 'Kazakhstani Tenge',
       },
       {
         value: 'KES',
-        label: 'Kenyan Shilling'
+        label: 'Kenyan Shilling',
       },
       {
         value: 'KWD',
-        label: 'Kuwaiti Dinar'
+        label: 'Kuwaiti Dinar',
       },
       {
         value: 'LVL',
-        label: 'Latvian Lats'
+        label: 'Latvian Lats',
       },
       {
         value: 'LBP',
-        label: 'Lebanese Pound'
+        label: 'Lebanese Pound',
       },
       {
         value: 'LTL',
-        label: 'Lithuanian Litas'
+        label: 'Lithuanian Litas',
       },
       {
         value: 'MKD',
-        label: 'Macedonian Denar'
+        label: 'Macedonian Denar',
       },
       {
         value: 'MYR',
-        label: 'Malaysian Ringgit'
+        label: 'Malaysian Ringgit',
       },
       {
         value: 'MUR',
-        label: 'Mauritian Rupee'
+        label: 'Mauritian Rupee',
       },
       {
         value: 'MXN',
-        label: 'Mexican Peso'
+        label: 'Mexican Peso',
       },
       {
         value: 'MDL',
-        label: 'Moldovan Leu'
+        label: 'Moldovan Leu',
       },
       {
         value: 'MAD',
-        label: 'Moroccan Dirham'
+        label: 'Moroccan Dirham',
       },
       {
         value: 'NAD',
-        label: 'Namibian Dollar'
+        label: 'Namibian Dollar',
       },
       {
         value: 'NPR',
-        label: 'Nepalese Rupee'
+        label: 'Nepalese Rupee',
       },
       {
         value: 'ANG',
-        label: 'Netherlands Antillean Guilder'
+        label: 'Netherlands Antillean Guilder',
       },
       {
         value: 'TWD',
-        label: 'New Taiwan Dollar'
+        label: 'New Taiwan Dollar',
       },
       {
         value: 'NZD',
-        label: 'New Zealand Dollar'
+        label: 'New Zealand Dollar',
       },
       {
         value: 'NIO',
-        label: 'Nicaraguan Córdoba'
+        label: 'Nicaraguan Córdoba',
       },
       {
         value: 'NGN',
-        label: 'Nigerian Naira'
+        label: 'Nigerian Naira',
       },
       {
         value: 'NOK',
-        label: 'Norwegian Krone'
+        label: 'Norwegian Krone',
       },
       {
         value: 'OMR',
-        label: 'Omani Rial'
+        label: 'Omani Rial',
       },
       {
         value: 'PKR',
-        label: 'Pakistani Rupee'
+        label: 'Pakistani Rupee',
       },
       {
         value: 'PGK',
-        label: 'Papua New Guinean Kina'
+        label: 'Papua New Guinean Kina',
       },
       {
         value: 'PYG',
-        label: 'Paraguayan Guarani'
+        label: 'Paraguayan Guarani',
       },
       {
         value: 'PEN',
-        label: 'Peruvian Nuevo Sol'
+        label: 'Peruvian Nuevo Sol',
       },
       {
         value: 'PHP',
-        label: 'Philippine Peso'
+        label: 'Philippine Peso',
       },
       {
         value: 'PLN',
-        label: 'Polish Zloty'
+        label: 'Polish Zloty',
       },
       {
         value: 'QAR',
-        label: 'Qatari Rial'
+        label: 'Qatari Rial',
       },
       {
         value: 'RON',
-        label: 'Romanian Leu'
+        label: 'Romanian Leu',
       },
       {
         value: 'RUB',
-        label: 'Russian Ruble'
+        label: 'Russian Ruble',
       },
       {
         value: 'SVC',
-        label: 'Salvadoran Colón'
+        label: 'Salvadoran Colón',
       },
       {
         value: 'SAR',
-        label: 'Saudi Riyal'
+        label: 'Saudi Riyal',
       },
       {
         value: 'RSD',
-        label: 'Serbian Dinar'
+        label: 'Serbian Dinar',
       },
       {
         value: 'SCR',
-        label: 'Seychellois Rupee'
+        label: 'Seychellois Rupee',
       },
       {
         value: 'SLL',
-        label: 'Sierra Leonean Leone'
+        label: 'Sierra Leonean Leone',
       },
       {
         value: 'SGD',
-        label: 'Singapore Dollar'
+        label: 'Singapore Dollar',
       },
       {
         value: 'SKK',
-        label: 'Slovak Koruna'
+        label: 'Slovak Koruna',
       },
       {
         value: 'ZAR',
-        label: 'South African Rand'
+        label: 'South African Rand',
       },
       {
         value: 'KRW',
-        label: 'South Korean Won'
+        label: 'South Korean Won',
       },
       {
         value: 'LKR',
-        label: 'Sri Lankan Rupee'
+        label: 'Sri Lankan Rupee',
       },
       {
         value: 'SEK',
-        label: 'Swedish Krona'
+        label: 'Swedish Krona',
       },
       {
         value: 'CHF',
-        label: 'Swiss Franc'
+        label: 'Swiss Franc',
       },
       {
         value: 'TZS',
-        label: 'Tanzanian Shilling'
+        label: 'Tanzanian Shilling',
       },
       {
         value: 'THB',
-        label: 'Thai Baht'
+        label: 'Thai Baht',
       },
       {
         value: 'TTD',
-        label: 'Trinidad and Tobago Dollar'
+        label: 'Trinidad and Tobago Dollar',
       },
       {
         value: 'TND',
-        label: 'Tunisian Dinar'
+        label: 'Tunisian Dinar',
       },
       {
         value: 'TRY',
-        label: 'Turkish Lira'
+        label: 'Turkish Lira',
       },
       {
         value: 'UGX',
-        label: 'Ugandan Shilling'
+        label: 'Ugandan Shilling',
       },
       {
         value: 'UAH',
-        label: 'Ukrainian Hryvnia'
+        label: 'Ukrainian Hryvnia',
       },
       {
         value: 'AED',
-        label: 'United Arab Emirates Dirham'
+        label: 'United Arab Emirates Dirham',
       },
       {
         value: 'UYU',
-        label: 'Uruguayan Peso'
+        label: 'Uruguayan Peso',
       },
       {
         value: 'USD',
-        label: 'US Dollar'
+        label: 'US Dollar',
       },
       {
         value: 'UZS',
-        label: 'Uzbekistan Som'
+        label: 'Uzbekistan Som',
       },
       {
         value: 'VEF',
-        label: 'Venezuelan Bolívar'
+        label: 'Venezuelan Bolívar',
       },
       {
         value: 'VND',
-        label: 'Vietnamese Dong'
+        label: 'Vietnamese Dong',
       },
       {
         value: 'YER',
-        label: 'Yemeni Rial'
+        label: 'Yemeni Rial',
       },
       {
         value: 'ZMK',
-        label: 'Zambian Kwacha (1968–2012)'
-      }
-    ]
+        label: 'Zambian Kwacha (1968–2012)',
+      },
+    ],
   },
   {
     title: 'Round price',
     name: 'round',
     type: 'bool',
-    value: true
+    value: true,
   },
   {
     title: 'Currency symbol',
     name: 'symbol',
     type: 'string',
-    value: ''
+    value: '',
   },
   {
     title: 'Symbol position',
@@ -395,19 +395,19 @@ window.OPTIONS = [
     options: [
       {
         value: 'b',
-        label: 'before'
+        label: 'before',
       },
       {
         value: 'a',
-        label: 'after'
-      }
-    ]
+        label: 'after',
+      },
+    ],
   },
   {
     title: 'Separate symbol from price',
     name: 'symbSep',
     type: 'bool',
-    value: true
+    value: true,
   },
   {
     title: 'Thousand separator',
@@ -417,21 +417,21 @@ window.OPTIONS = [
     options: [
       {
         value: '',
-        label: 'none'
+        label: 'none',
       },
       {
         value: ' ',
-        label: 'space'
+        label: 'space',
       },
       {
         value: ',',
-        label: ','
+        label: ',',
       },
       {
         value: '.',
-        label: '.'
-      }
-    ]
+        label: '.',
+      },
+    ],
   },
   {
     title: 'Decimal separator',
@@ -441,24 +441,24 @@ window.OPTIONS = [
     options: [
       {
         value: ',',
-        label: ','
+        label: ',',
       },
       {
         value: '.',
-        label: '.'
-      }
-    ]
+        label: '.',
+      },
+    ],
   },
   {
     title: 'Add custom style to converted prices',
     name: 'style',
     type: 'bool',
-    value: true
+    value: true,
   },
   {
     title: 'Show exchange rate update notifications',
     name: 'noti',
     type: 'bool',
-    value: true
-  }
+    value: true,
+  },
 ];

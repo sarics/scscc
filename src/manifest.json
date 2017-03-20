@@ -14,7 +14,7 @@
   "applications": {
     "gecko": {
       "id": "scscurrencyconverter@sarics",
-      "strict_min_version": "45.0"
+      "strict_min_version": "48.0"
     }
   },
 
@@ -26,15 +26,14 @@
 
   "background": {
     "scripts": [
-      "background_scripts/options.js",
-      "background_scripts/background.js"
+      "background/background.js"
     ]
   },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/scscc.js"]
+      "js": ["content/content.js"]
     }
   ],
 
