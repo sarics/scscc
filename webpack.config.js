@@ -4,10 +4,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
-    background: './background_scripts/index.js',
-    content: './content_scripts/index.js',
-    popup: './popup/popup.js',
-    options: './options/options.js',
+    background: './background/index.js',
+    content: './content/index.js',
+    popup: './popup/index.js',
+    options: './options/index.js',
   },
 
   output: {
