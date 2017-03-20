@@ -7,10 +7,15 @@
   "license": "GPL-2.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --watch",
-    "build": "webpack"
+    "clean": "rimraf dist",
+    "watch": "webpack --watch",
+    "pack": "webpack",
+    "archive": "node scripts/archive",
+    "start": "run-s clean watch",
+    "build": "run-s clean pack archive"
   },
   "devDependencies": {
+    "archiver": "^1.3.0",
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "babel-preset-env": "^1.2.2",
@@ -19,6 +24,8 @@
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
     "file-loader": "^0.10.1",
+    "npm-run-all": "^4.0.2",
+    "rimraf": "^2.6.1",
     "webpack": "^2.2.1"
   }
 }
