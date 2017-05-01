@@ -34,7 +34,15 @@ const stop = () => {
 };
 
 const refresh = () => {
-  if (!document.hidden) refreshPrices();
+  if (!started) return;
+
+  if (document.hidden) {
+    observer.disconnect();
+  } else {
+    observer.observe();
+
+    refreshPrices();
+  }
 };
 
 
