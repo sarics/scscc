@@ -53,6 +53,8 @@ browser.storage.local.get()
       if (Object.keys(storage.currRates).length !== Object.keys(newCurrRates).length) {
         currRates = newCurrRates;
         newStorage.currRates = newCurrRates;
+      } else {
+        currRates = storage.currRates;
       }
     } else {
       newStorage.currRates = {};
