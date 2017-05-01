@@ -1,3 +1,15 @@
+const getCssPseudoContent = (node, place) => {
+  const style = window.getComputedStyle(node, `:${place}`);
+  if (style && style.content !== 'none') {
+    const contentMatch = style.content.match(/^"(.*)"$/);
+    if (contentMatch && contentMatch[1]) {
+      return contentMatch[1].trim();
+    }
+  }
+
+  return '';
+};
+
 // check if currency symbol is in an other sibling node
 const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
   const chckTxt = {};
@@ -41,15 +53,15 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
     }
   }
 
+  chckTxt.before = getCssPseudoContent(textNode.parentNode, 'before');
+  chckTxt.after = getCssPseudoContent(textNode.parentNode, 'after');
+
   Object.keys(chckTxt).forEach((pos) => {
     if (!chckTxt[pos].length) return;
 
     Object.keys(symbPatts).forEach((fromCurr) => {
       if (fromCurr === toCurr) return;
 
-      // let symbPatt;
-      // if (pos === 'prev') symbPatt = new RegExp(`${symbPatts[fromCurr]}$`, 'gi');
-      // else symbPatt = new RegExp(`^${symbPatts[fromCurr]}`, 'gi');
       const symbPatt = new RegExp(`^${symbPatts[fromCurr]}$`, 'gi');
 
       if (symbPatt.test(chckTxt[pos])) {
