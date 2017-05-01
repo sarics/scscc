@@ -2,6 +2,7 @@ import './options.html';
 import './options.css';
 
 import getOptionTrElem from './utils/getOptionTrElem';
+import getButtonTrElem from './utils/getButtonTrElem';
 import getChangedPrefs from './utils/getChangedPrefs';
 
 let options;
@@ -18,6 +19,10 @@ const onChange = (event) => {
   }
 };
 
+const onReset = () => {
+  browser.storage.local.set({ currRates: {} });
+};
+
 const buildOptionsForm = (preferences) => {
   const tableElem = document.getElementById('options');
 
@@ -27,6 +32,10 @@ const buildOptionsForm = (preferences) => {
 
     tableElem.appendChild(optionTrElem);
   });
+
+  const buttonTrElem = getButtonTrElem('Reset exchange rates', onReset);
+
+  tableElem.appendChild(buttonTrElem);
 
   document.body.appendChild(tableElem);
 };
