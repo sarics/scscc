@@ -1,3 +1,5 @@
+const wordPatt = new RegExp(`[${UNICODE_ALPHABETIC}]`);
+
 export const checkPriceSpecCases = (txt, match, fromCurr) => {
   let chckchar;
   const charind = txt.indexOf(match);
@@ -46,11 +48,11 @@ export const checkPriceSpecCases = (txt, match, fromCurr) => {
     if (sind === 0) { // starts with eur(os)/usd/gbp
       // if there is any word character before it, skip it
       chckchar = txt.charAt(charind - 1);
-      if (/\w/.test(chckchar)) return null;
+      if (wordPatt.test(chckchar)) return null;
     } else { // ends with eur(os)/usd/gbp
       // if there is any word character after it, skip it
       chckchar = txt.charAt(charind + match.length);
-      if (/\w/.test(chckchar)) return null;
+      if (wordPatt.test(chckchar)) return null;
     }
   }
 
@@ -58,7 +60,7 @@ export const checkPriceSpecCases = (txt, match, fromCurr) => {
   if (match.charAt(0).search(/\d/) !== -1) {
     // if there is a word character before it
     chckchar = txt.charAt(charind - 1);
-    if (chckchar.search(/\w/) !== -1) {
+    if (wordPatt.test(chckchar)) {
       checkedMatch = match.replace(/^\d+\s/, '');  // convert only 234 $
     }
   }

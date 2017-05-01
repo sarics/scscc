@@ -1,5 +1,13 @@
 const path = require('path');
+const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const XRegExp = require('xregexp/src/xregexp');
+const XRegExpUnicodeBase = require('xregexp/src/addons/unicode-base');
+const XRegExpUnicodeProperties = require('xregexp/src/addons/unicode-properties');
+
+XRegExpUnicodeBase(XRegExp);
+XRegExpUnicodeProperties(XRegExp);
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -43,6 +51,9 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      UNICODE_ALPHABETIC: JSON.stringify(XRegExp._getUnicodeProperty('Alphabetic').bmp), // eslint-disable-line no-underscore-dangle
+    }),
     new CopyWebpackPlugin([
       {
         from: 'manifest.json',

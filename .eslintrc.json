@@ -4,7 +4,9 @@
     "browser": true,
     "webextensions": true
   },
-  "globals": {},
+  "globals": {
+    "UNICODE_ALPHABETIC": false
+  },
   "rules": {
     "arrow-parens": ["error", "always"],
     "max-len": "off",
