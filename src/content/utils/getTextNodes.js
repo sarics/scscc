@@ -1,4 +1,4 @@
-export default (node, patts, ignore = ['script', 'style', 'pre']) => {
+export default (node, patts, ignore = ['script', 'style', 'pre', 'code']) => {
   const textNodes = [];
   const ignoreNodes = new RegExp(`^(${ignore.join('|')})$`, 'i');
   const patt = new RegExp(patts.numPatt);
