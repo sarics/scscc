@@ -75,10 +75,10 @@ export const cleanPrice = (price) => {
 
   // if no decimal separator
   // remove possible "." or "," thousand separators
-  if (cleanedPrice.search(/(\.|,)\d{1,2}$/) === -1) cleanedPrice = cleanedPrice.replace(/\.|,/g, '');
+  if (!/(\.|,)\d{1,2}$/.test(cleanedPrice)) cleanedPrice = cleanedPrice.replace(/\.|,/g, '');
   // if decimal separator is "."
   // remove possible "," thousand separators
-  else if (price.search(/\.\d{1,2}$/) !== -1) cleanedPrice = cleanedPrice.replace(/,/g, '');
+  else if (/\.\d{1,2}$/.test(cleanedPrice)) cleanedPrice = cleanedPrice.replace(/,/g, '');
   // if decimal separptor is ","
   else {
     // remove possible "." thousand separators
