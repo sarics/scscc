@@ -1,7 +1,7 @@
 export const numPatt = '(((\\d{1,3}((,|\\.|\\s)\\d{3})+|(\\d+))((\\.|,)\\d{1,9})?)|(\\.\\d{1,9}))(,--)?';
 export const symbPatts = {
   EUR: '(€|eur(os|o)?)',
-  USD: '(\\$|usd)',
+  USD: '((us\\s?)?\\$|usd)',
   GBP: '(£|gbp)',
 };
 
@@ -12,3 +12,8 @@ export const currPatts = Object.keys(symbPatts)
 
     return patts.concat([{ from: fromCurr, patt: beforePatt }, { from: fromCurr, patt: afterPatt }]);
   }, []);
+
+const allSymbPatt = Object.keys(symbPatts).reduce((patt, curr) => `${patt}|${symbPatts[curr].replace(/^\((.*)\)$/, '$1')}`, '\\s|,--');
+export const cleanSymbPatt = new RegExp(allSymbPatt, 'gi');
+
+export const wordPatt = new RegExp(`[${UNICODE_ALPHABETIC}]`);

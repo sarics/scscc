@@ -1,4 +1,4 @@
-const wordPatt = new RegExp(`[${UNICODE_ALPHABETIC}]`);
+import { cleanSymbPatt, wordPatt } from './patts';
 
 export const checkPriceSpecCases = (txt, match, fromCurr) => {
   let chckchar;
@@ -71,7 +71,7 @@ export const checkPriceSpecCases = (txt, match, fromCurr) => {
 
 export const cleanPrice = (price) => {
   // remove currency symbols and spaces
-  let cleanedPrice = price.replace(/€|eur(os|o)?|\$|usd|£|gbp|,--|\s/ig, '');
+  let cleanedPrice = price.replace(cleanSymbPatt, '');
 
   // if no decimal separator
   // remove possible "." or "," thousand separators
