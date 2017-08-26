@@ -1,71 +1,24 @@
 import { cleanSymbPatt, wordPatt } from './patts';
 
-export const checkPriceSpecCases = (txt, match, fromCurr) => {
-  let chckchar;
+const alphabeticPatt = new RegExp(wordPatt);
+const alphaNumericPatt = new RegExp(wordPatt.replace(/^\[/, '[0-9'));
+
+export const checkPriceSpecCases = (txt, match) => {
   const charind = txt.indexOf(match);
-  let checkedMatch = match;
 
-  // skip other dollars
-  // Australian (A$)
-  // Barbadian (Bds$)
-  // Belizean (BZ$)
-  // Brunei (B$)
-  // Canadian (CA$)
-  // Cayman Islands (CI$)
-  // East Caribbean (EC$)
-  // Fiji (FJ$)
-  // Guyanese (G$)
-  // Hong Kong (HK$)
-  // Jamaican (J$)
-  // Liberian (L$ or LD$)
-  // Namibian (N$)
-  // New Zealand (NZ$)
-  // Singaporean (S$)
-  // Soloman Islands (SI$)
-  // Taiwanese (NT$)
-  // Trinidad and Tobago (TT$)
-  // Tuvaluan (TV$)
-  // Zimbabwean (Z$)
-  // Chilean (CLP$)
-  // Colombian (COL$)
-  // Dominican (RD$)
-  // Mexican (Mex$)
-  // Nicaraguan córdoba (C$)
-  // Brazilian real (R$)
-  if (fromCurr === 'USD' && match.charAt(0) === '$') {
-    chckchar = txt.charAt(charind - 1);
-    if (
-      /\w/.test(chckchar) &&
-      /(A|Bds|BZ|B|CA|CI|EC|FJ|G|HK|J|L|LD|N|NZ|S|SI|NT|TT|TV|Z|CLP|COL|RD|Mex|C|R)$/.test(txt.slice(0, charind))
-    ) return null;
-  }
-
-  // in case text is like: masseur 1234
-  // or
-  // in case text is like: 1234 europe
-  const sind = match.search(/eur|usd|gbp/i);
-  if (sind !== -1) {
-    if (sind === 0) { // starts with eur(os)/usd/gbp
-      // if there is any word character before it, skip it
-      chckchar = txt.charAt(charind - 1);
-      if (wordPatt.test(chckchar)) return null;
-    } else { // ends with eur(os)/usd/gbp
-      // if there is any word character after it, skip it
-      chckchar = txt.charAt(charind + match.length);
-      if (wordPatt.test(chckchar)) return null;
-    }
-  }
+  const bChar = txt.charAt(charind - 1);
+  const aChar = txt.charAt(charind + match.length);
 
   // in case text is like: somestring1 234 $
-  if (match.charAt(0).search(/\d/) !== -1) {
-    // if there is a word character before it
-    chckchar = txt.charAt(charind - 1);
-    if (wordPatt.test(chckchar)) {
-      checkedMatch = match.replace(/^\d+\s/, '');  // convert only 234 $
-    }
+  // if there is a word character before it
+  if (/^\d/.test(match) && alphabeticPatt.test(bChar)) {
+    if (/^\d+\s+\d/.test(match)) return match.replace(/^\d+\s+/, ''); // convert only 234 $
+    return null;
   }
 
-  return checkedMatch;
+  if (alphaNumericPatt.test(bChar) || alphaNumericPatt.test(aChar)) return null;
+
+  return match;
 };
 
 

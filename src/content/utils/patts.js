@@ -16,4 +16,6 @@ export const currPatts = Object.keys(symbPatts)
 const allSymbPatt = Object.keys(symbPatts).reduce((patt, curr) => `${patt}|${symbPatts[curr].replace(/^\((.*)\)$/, '$1')}`, '\\s|,--');
 export const cleanSymbPatt = new RegExp(allSymbPatt, 'gi');
 
-export const wordPatt = new RegExp(`[${UNICODE_ALPHABETIC}]`);
+const alphabeticChars = UNICODE_ALPHABETIC;
+export const wordPatt = `[${alphabeticChars}]`;
+export const nonWordPatt = `[^${alphabeticChars}]`;

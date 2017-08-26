@@ -1,3 +1,5 @@
+import { nonWordPatt } from './patts';
+
 const getCssPseudoContent = (node, place) => {
   const style = window.getComputedStyle(node, `:${place}`);
   if (style && style.content !== 'none') {
@@ -57,12 +59,17 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
   chckTxt.after = getCssPseudoContent(textNode.parentNode, 'after');
 
   Object.keys(chckTxt).forEach((pos) => {
-    if (!chckTxt[pos].length) return;
+    if (!chckTxt[pos]) return;
 
     Object.keys(symbPatts).forEach((fromCurr) => {
       if (fromCurr === toCurr) return;
 
-      const symbPatt = new RegExp(`^${symbPatts[fromCurr]}$`, 'gi');
+      let symbPattStr = symbPatts[fromCurr];
+      if (pos === 'prev') symbPattStr = `${nonWordPatt}${symbPattStr}$`;
+      else if (pos === 'next') symbPattStr = `^${symbPattStr}${nonWordPatt}`;
+      else symbPattStr = `^${symbPattStr}$`;
+
+      const symbPatt = new RegExp(symbPattStr, 'i');
 
       if (symbPatt.test(chckTxt[pos])) {
         matches[fromCurr] = match;
