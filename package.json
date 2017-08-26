@@ -8,14 +8,14 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
-    "watch": "webpack --watch",
-    "pack": "webpack",
-    "archive": "node scripts/archive",
-    "start": "run-s clean watch",
-    "build": "run-s clean pack archive"
+    "run:webpack": "webpack --watch",
+    "run:web-ext": "web-ext run -s dist",
+    "build:webpack": "webpack",
+    "build:web-ext": "web-ext build -s dist -a build",
+    "start": "npm-run-all clean watch:webpack",
+    "build": "npm-run-all clean build:*"
   },
   "devDependencies": {
-    "archiver": "^2.0.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
@@ -26,6 +26,7 @@
     "file-loader": "^0.11.2",
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
+    "web-ext": "^2.0.0",
     "webpack": "^3.5.5",
     "xregexp": "^3.2.0"
   }
