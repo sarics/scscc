@@ -12,7 +12,7 @@
     "run:web-ext": "web-ext run -s dist",
     "build:webpack": "webpack",
     "build:web-ext": "web-ext build -s dist -a build",
-    "start": "npm-run-all clean watch:webpack",
+    "start": "npm-run-all clean run:webpack",
     "build": "npm-run-all clean build:webpack build:web-ext"
   },
   "devDependencies": {
@@ -23,7 +23,7 @@
     "eslint": "^4.5.0",
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-plugin-import": "^2.7.0",
-    "npm-run-all": "^4.0.2",
+    "npm-run-all": "^4.1.0",
     "rimraf": "^2.6.1",
     "web-ext": "^2.0.0",
     "webpack": "^3.5.5",
