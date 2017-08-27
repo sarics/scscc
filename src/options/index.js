@@ -1,6 +1,3 @@
-import './options.html';
-import './options.css';
-
 import getOptionTrElem from './utils/getOptionTrElem';
 import getButtonTrElem from './utils/getButtonTrElem';
 import getChangedPrefs from './utils/getChangedPrefs';

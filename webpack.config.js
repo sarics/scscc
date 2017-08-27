@@ -36,17 +36,6 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.(?!js).+$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[path][name].[ext]',
-            },
-          },
-        ],
-      },
     ],
   },
 
@@ -61,6 +50,9 @@ module.exports = {
       {
         from: 'icons',
         to: 'icons',
+      },
+      {
+        from: '*/*.+(html|css)',
       },
     ]),
   ],

@@ -13,7 +13,7 @@
     "build:webpack": "webpack",
     "build:web-ext": "web-ext build -s dist -a build",
     "start": "npm-run-all clean watch:webpack",
-    "build": "npm-run-all clean build:*"
+    "build": "npm-run-all clean build:webpack build:web-ext"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -23,7 +23,6 @@
     "eslint": "^4.5.0",
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-plugin-import": "^2.7.0",
-    "file-loader": "^0.11.2",
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",
     "web-ext": "^2.0.0",

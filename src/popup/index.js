@@ -1,6 +1,3 @@
-import './popup.html';
-import './popup.css';
-
 import getUpdatedTxt from './utils/getUpdatedTxt';
 import getRateLiElem from './utils/getRateLiElem';
 
