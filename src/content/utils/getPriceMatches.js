@@ -23,6 +23,7 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
 
   const prevSibling = textNode.previousSibling;
   const parentPrevSibling = textNode.parentNode.previousSibling;
+  const parentPrevElemSibling = textNode.parentNode.previousElementSibling;
   // check previous sibling of
   if (prevSibling && prevSibling.lastChild && prevSibling.lastChild.nodeType === 3) {
     // this node -> check sibling's last child
@@ -37,9 +38,13 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
       chckTxt.prev = parentPrevSibling.lastChild.nodeValue.trim();
     }
   }
+  if (!chckTxt.prev && parentPrevElemSibling && parentPrevElemSibling.lastChild && parentPrevElemSibling.lastChild.nodeType === 3) {
+    chckTxt.prev = parentPrevElemSibling.lastChild.nodeValue.trim();
+  }
 
   const nextSibling = textNode.nextSibling;
   const parentNextSibling = textNode.parentNode.nextSibling;
+  const parentNextElemSibling = textNode.parentNode.nextElementSibling;
   // check next sibling of
   if (nextSibling && nextSibling.firstChild && nextSibling.firstChild.nodeType === 3) {
     // this node -> check sibling's first child
@@ -54,6 +59,9 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
       chckTxt.next = parentNextSibling.firstChild.nodeValue.trim();
     }
   }
+  if (!chckTxt.next && parentNextElemSibling && parentNextElemSibling.firstChild && parentNextElemSibling.firstChild.nodeType === 3) {
+    chckTxt.next = parentNextElemSibling.firstChild.nodeValue.trim();
+  }
 
   chckTxt.before = getCssPseudoContent(textNode.parentNode, 'before');
   chckTxt.after = getCssPseudoContent(textNode.parentNode, 'after');
@@ -65,8 +73,8 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
       if (fromCurr === toCurr) return;
 
       let symbPattStr = symbPatts[fromCurr];
-      if (pos === 'prev') symbPattStr = `${nonWordPatt}${symbPattStr}$`;
-      else if (pos === 'next') symbPattStr = `^${symbPattStr}${nonWordPatt}`;
+      if (pos === 'prev') symbPattStr = `${nonWordPatt}?${symbPattStr}$`;
+      else if (pos === 'next') symbPattStr = `^${symbPattStr}${nonWordPatt}?`;
       else symbPattStr = `^${symbPattStr}$`;
 
       const symbPatt = new RegExp(symbPattStr, 'i');
