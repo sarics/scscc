@@ -1,11 +1,14 @@
 {
   "name": "scscc",
   "description": "Convert US Dollar, British Pound Sterling and Euro prices to a user set currency",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "sarics",
   "homepage": "https://addons.mozilla.org/addon/scscurrencyconverter/",
   "license": "GPL-2.0",
-  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sarics/scscc.git"
+  },
   "scripts": {
     "clean": "rimraf dist",
     "run:webpack": "webpack --watch",
