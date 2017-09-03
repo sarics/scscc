@@ -1,5 +1,5 @@
-import getOptionTrElem from './utils/getOptionTrElem';
-import getButtonTrElem from './utils/getButtonTrElem';
+import getOptionRowElem from './utils/getOptionRowElem';
+import getButtonRowElem from './utils/getButtonRowElem';
 import getChangedPrefs from './utils/getChangedPrefs';
 
 
@@ -20,18 +20,18 @@ const onReset = () => {
 };
 
 const buildOptionsForm = (options, preferences) => {
-  const tableElem = document.getElementById('options');
+  const optionsElem = document.getElementById('options');
 
   options.forEach((option) => {
     const value = preferences[option.name];
-    const optionTrElem = getOptionTrElem(option, value, onChange);
+    const optionRowElem = getOptionRowElem(option, value, onChange);
 
-    tableElem.appendChild(optionTrElem);
+    optionsElem.appendChild(optionRowElem);
   });
 
-  const buttonTrElem = getButtonTrElem('Reset exchange rates', onReset);
+  const buttonRowElem = getButtonRowElem('Reset exchange rates', onReset);
 
-  tableElem.appendChild(buttonTrElem);
+  optionsElem.appendChild(buttonRowElem);
 };
 
 const refreshOptionsForm = (changedPrefs) => {
