@@ -1,17 +1,20 @@
 export default (text, onClick) => {
-  const trElem = document.createElement('tr');
+  const rowElem = document.createElement('div');
+  rowElem.className = 'row';
 
-  const emptyTdElem = document.createElement('td');
-  trElem.appendChild(emptyTdElem);
+  const emplyColElem = document.createElement('div');
+  emplyColElem.className = 'col';
+  rowElem.appendChild(emplyColElem);
 
-  const buttonTdElem = document.createElement('td');
+  const buttonColElem = document.createElement('div');
+  buttonColElem.className = 'col';
 
   const buttonElem = document.createElement('button');
   buttonElem.textContent = text;
   buttonElem.addEventListener('click', onClick);
 
-  buttonTdElem.appendChild(buttonElem);
-  trElem.appendChild(buttonTdElem);
+  buttonColElem.appendChild(buttonElem);
+  rowElem.appendChild(buttonColElem);
 
-  return trElem;
+  return rowElem;
 };

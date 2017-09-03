@@ -49,6 +49,7 @@ export default (currRates, fromCurr, toCurr) => {
       req.addEventListener('error', onEnd);
 
       req.open('GET', `https://www.google.com/search?q=1+${fromCurr}+to+${toCurr}&hl=en`, true);
+      req.setRequestHeader('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0'); // to request desktop site
       req.send();
     });
   }

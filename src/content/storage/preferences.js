@@ -5,6 +5,7 @@ let preferences = {};
 
 browser.storage.local.get('preferences')
   .then(({ preferences: data }) => {
+    if (!data) return;
     preferences = data;
     callListeners(listeners, preferences);
   });

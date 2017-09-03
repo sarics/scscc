@@ -24,9 +24,44 @@ options.forEach((option) => {
   preferences[option.name] = option.value;
 });
 
-function onError(error) {
+const onError = (error) => {
   console.error('SCsCC - error:', error.message);
-}
+};
+
+
+const openTab = (path) => {
+  const url = browser.runtime.getURL(path);
+  const notFoundErr = 'no opened tab found';
+
+  return browser.tabs.query({})
+    .then((tabs) => tabs.reduce((oTab, tab) => (!oTab && tab.url === url ? tab : oTab), false))
+    .then((oTab) => {
+      if (!oTab) throw new Error(notFoundErr);
+      return browser.tabs.update(oTab.id, { active: true });
+    })
+    .catch((err) => {
+      if (err.message !== notFoundErr) onError(err);
+
+      return browser.tabs.create({
+        active: true,
+        url,
+      });
+    })
+    .catch(onError);
+};
+
+const openOptionsTab = () => openTab('options/options.html');
+
+const openPopupTab = () => openTab('popup/popup.html');
+
+window.openOptionsPage = () =>
+  browser.runtime.openOptionsPage()
+    .catch((err) => {
+      onError(err);
+
+      openOptionsTab();
+    });
+
 
 // get storage
 browser.storage.local.get()
@@ -62,16 +97,17 @@ browser.storage.local.get()
 
     if (Object.keys(newStorage).length) browser.storage.local.set(newStorage);
 
-    if (!preferences.toCurr) browser.runtime.openOptionsPage();
+    if (!preferences.toCurr) window.openOptionsPage();
 
-    browser.browserAction.setIcon({ path: preferences.enabled ? icons.enabled : icons.disabled });
+    if (browser.browserAction.setIcon) browser.browserAction.setIcon({ path: preferences.enabled ? icons.enabled : icons.disabled });
+    browser.browserAction.onClicked.addListener(openPopupTab);
   })
   .catch(onError);
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.preferences && changes.preferences.newValue) {
     const newPrefs = changes.preferences.newValue;
-    if (newPrefs.enabled !== preferences.enabled) browser.browserAction.setIcon({ path: newPrefs.enabled ? icons.enabled : icons.disabled });
+    if (browser.browserAction.setIcon && newPrefs.enabled !== preferences.enabled) browser.browserAction.setIcon({ path: newPrefs.enabled ? icons.enabled : icons.disabled });
 
     preferences = newPrefs;
   }

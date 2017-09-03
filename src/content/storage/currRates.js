@@ -6,6 +6,7 @@ let currRates = {};
 
 browser.storage.local.get('currRates')
   .then(({ currRates: data }) => {
+    if (!data) return;
     currRates = data;
     callListeners(listeners, currRates, true);
   });

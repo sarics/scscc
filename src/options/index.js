@@ -2,7 +2,6 @@ import getOptionTrElem from './utils/getOptionTrElem';
 import getButtonTrElem from './utils/getButtonTrElem';
 import getChangedPrefs from './utils/getChangedPrefs';
 
-let options;
 
 const onChange = (event) => {
   const target = event.target;
@@ -20,7 +19,7 @@ const onReset = () => {
   browser.storage.local.set({ currRates: {} });
 };
 
-const buildOptionsForm = (preferences) => {
+const buildOptionsForm = (options, preferences) => {
   const tableElem = document.getElementById('options');
 
   options.forEach((option) => {
@@ -33,8 +32,6 @@ const buildOptionsForm = (preferences) => {
   const buttonTrElem = getButtonTrElem('Reset exchange rates', onReset);
 
   tableElem.appendChild(buttonTrElem);
-
-  document.body.appendChild(tableElem);
 };
 
 const refreshOptionsForm = (changedPrefs) => {
@@ -54,14 +51,9 @@ const refreshOptionsForm = (changedPrefs) => {
   });
 };
 
-browser.runtime.getBackgroundPage()
-  .then((bgWindow) => {
-    options = bgWindow.OPTIONS;
-
-    return browser.storage.local.get('preferences');
-  })
-  .then((storage) => {
-    buildOptionsForm(storage.preferences);
+Promise.all([browser.runtime.getBackgroundPage(), browser.storage.local.get('preferences')])
+  .then(([bgWindow, storage]) => {
+    buildOptionsForm(bgWindow.OPTIONS, storage.preferences);
 
     browser.storage.onChanged.addListener((changes) => {
       if (changes.preferences) {

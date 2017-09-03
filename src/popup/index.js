@@ -92,5 +92,8 @@ resetBtnElem.addEventListener('click', () => {
 });
 
 optionsBtnElem.addEventListener('click', () => {
-  browser.runtime.openOptionsPage();
+  browser.runtime.getBackgroundPage()
+    .then((bgWindow) => {
+      bgWindow.openOptionsPage();
+    });
 });

@@ -1,15 +1,19 @@
 export default (option, value, onChange) => {
-  const trElem = document.createElement('tr');
+  const rowElem = document.createElement('div');
+  rowElem.className = 'row';
 
-  const labelTdElem = document.createElement('td');
+  const labelColElem = document.createElement('div');
+  labelColElem.className = 'col';
   const labelElem = document.createElement('label');
   labelElem.htmlFor = `option-${option.name}`;
   labelElem.textContent = option.title;
 
-  labelTdElem.appendChild(labelElem);
-  trElem.appendChild(labelTdElem);
+  labelColElem.appendChild(labelElem);
+  rowElem.appendChild(labelColElem);
 
-  const optionTdElem = document.createElement('td');
+  const optionColElem = document.createElement('div');
+  optionColElem.className = 'col';
+
   let optionElem;
   if (option.type === 'string') {
     optionElem = document.createElement('input');
@@ -62,9 +66,9 @@ export default (option, value, onChange) => {
   if (optionElem) {
     optionElem.id = `option-${option.name}`;
 
-    optionTdElem.appendChild(optionElem);
-    trElem.appendChild(optionTdElem);
+    optionColElem.appendChild(optionElem);
+    rowElem.appendChild(optionColElem);
   }
 
-  return trElem;
+  return rowElem;
 };

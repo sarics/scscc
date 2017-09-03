@@ -1,3 +1,9 @@
+html *,
+html *::before,
+html *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -7,19 +13,38 @@ body {
   cursor: default;
 }
 
-#options {
-  width: 100%;
-  table-layout: fixed;
-  border-spacing: 0;
-  border-collapse: collapse;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
 }
-#options > tr > td {
-  padding: 5px;
+
+.row {
+  margin-bottom: 5px;
   border-bottom: 1px solid #c1c1c1;
 }
-#options > tr > td:first-child {
-  width: 30%;
+.row::before,
+.row::after {
+  content: '';
+  display: table;
 }
-#options > tr:last-child > td {
+.row::after {
+  clear: both;
+}
+.row:last-child {
   border-bottom: none;
+}
+
+.col {
+  float: left;
+  padding: 0 5px 5px;
+}
+
+#options .col:first-child {
+  width: 100%;
+}
+
+@media (min-width: 500px) {
+  #options .col:first-child {
+    width: 250px;
+  }
 }

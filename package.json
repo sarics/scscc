@@ -14,7 +14,7 @@
     "run:webpack": "webpack --watch",
     "run:web-ext": "web-ext run -s dist",
     "build:webpack": "webpack",
-    "build:web-ext": "web-ext build -s dist -a build",
+    "build:web-ext": "web-ext build -o -s dist -a build",
     "start": "npm-run-all clean run:webpack",
     "build": "npm-run-all clean build:webpack build:web-ext"
   },
