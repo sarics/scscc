@@ -1,8 +1,8 @@
 const requests = {};
 
 const patterns = [
-  /id=['"]?exchange_rate['"]?.*value=['"]?(\d+\.\d+)['"]?/i,
-  /id=['"]?knowledge-currency__tgt-input['"]?.*value=['"]?(\d+\.\d+)['"]?/i,
+  /id=['"]?exchange_rate['"]?[^>]*value=['"]?(\d+\.\d+)['"]?/i,
+  /id=['"]?knowledge-currency__tgt-input['"]?[^>]*value=['"]?(\d+\.\d+)['"]?/i,
 ];
 
 const getTxtMatch = (txt) =>
