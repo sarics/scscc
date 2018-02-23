@@ -43,6 +43,7 @@ module.exports = {
     new webpack.DefinePlugin({
       UNICODE_ALPHABETIC: JSON.stringify(XRegExp._getUnicodeProperty('Alphabetic').bmp), // eslint-disable-line no-underscore-dangle
     }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new CopyWebpackPlugin([
       {
         from: 'manifest.json',
@@ -56,4 +57,11 @@ module.exports = {
       },
     ]),
   ],
+
+  stats: {
+    // Examine all modules
+    maxModules: Infinity,
+    // Display bailout reasons
+    optimizationBailout: true,
+  },
 };
