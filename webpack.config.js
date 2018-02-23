@@ -2,9 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const XRegExp = require('xregexp/src/xregexp');
-const XRegExpUnicodeBase = require('xregexp/src/addons/unicode-base');
-const XRegExpUnicodeProperties = require('xregexp/src/addons/unicode-properties');
+const XRegExp = require('xregexp/lib/xregexp');
+const XRegExpUnicodeBase = require('xregexp/lib/addons/unicode-base');
+const XRegExpUnicodeProperties = require('xregexp/lib/addons/unicode-properties');
 
 XRegExpUnicodeBase(XRegExp);
 XRegExpUnicodeProperties(XRegExp);
