@@ -3,8 +3,7 @@ import getButtonRowElem from './utils/getButtonRowElem';
 import getChangedPrefs from './utils/getChangedPrefs';
 
 
-const onChange = (event) => {
-  const target = event.target;
+const onChange = ({ target }) => {
   const changedPrefs = getChangedPrefs(target);
 
   if (Object.keys(changedPrefs).length) {

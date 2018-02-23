@@ -42,7 +42,7 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
     chckTxt.prev = parentPrevElemSibling.lastChild.nodeValue.trim();
   }
 
-  const nextSibling = textNode.nextSibling;
+  const { nextSibling } = textNode;
   const parentNextSibling = textNode.parentNode.nextSibling;
   const parentNextElemSibling = textNode.parentNode.nextElementSibling;
   // check next sibling of

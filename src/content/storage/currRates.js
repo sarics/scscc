@@ -23,7 +23,7 @@ browser.storage.onChanged.addListener((changes) => {
 
 const get = (fromCurr, toCurr) => {
   const reqKey = `${fromCurr}to${toCurr}`;
-  const currRate = currRates[reqKey] ? currRates[reqKey].value : null;
+  const currRate = currRates[reqKey] ? currRates[reqKey].value : undefined;
 
   if (!requests[reqKey]) {
     const data = { from: fromCurr, to: toCurr };

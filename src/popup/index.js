@@ -30,7 +30,7 @@ const refreshCurrRatesList = (currRates) => {
   Object.keys(currRates).forEach((currKey) => {
     const currRate = currRates[currKey];
     const updatedTxt = getUpdatedTxt(currRate.updatedAt);
-    const rateLiElem = getRateLiElem(currKey, currRate.value, updatedTxt);
+    const rateLiElem = getRateLiElem(currKey, currRate.value || 'n/a', updatedTxt);
 
     ratesUlElem.appendChild(rateLiElem);
   });
@@ -55,8 +55,7 @@ browser.runtime.getBackgroundPage()
     return browser.storage.local.get();
   })
   .then((storage) => {
-    const enabled = storage.preferences.enabled;
-    const toCurr = storage.preferences.toCurr;
+    const { enabled, toCurr } = storage.preferences;
     const currRates = storage.currRates || {};
 
     setState(enabled);
@@ -65,7 +64,7 @@ browser.runtime.getBackgroundPage()
 
     browser.storage.onChanged.addListener((changes) => {
       if (changes.preferences) {
-        const { oldValue, newValue } = changes.preferences.oldValue;
+        const { oldValue, newValue } = changes.preferences;
 
         if (oldValue.enabled !== newValue.enabled) setState(newValue.enabled);
         if (oldValue.toCurr !== newValue.toCurr) setToCurr(newValue.toCurr);
@@ -79,8 +78,7 @@ browser.runtime.getBackgroundPage()
 
 stateBtnElem.addEventListener('click', () => {
   browser.storage.local.get('preferences')
-    .then((storage) => {
-      const preferences = storage.preferences;
+    .then(({ preferences }) => {
       preferences.enabled = !preferences.enabled;
 
       browser.storage.local.set({ preferences });

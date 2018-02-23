@@ -39,7 +39,7 @@ const replaceText = ({ node, matches }) => {
   const dataNodes = getDataNodes(node, matches);
   if (!dataNodes.length) return;
 
-  const parentNode = node.parentNode;
+  const { parentNode } = node;
 
   const tmpDivElem = document.createElement('div');
   tmpDivElem.appendChild(node.cloneNode());

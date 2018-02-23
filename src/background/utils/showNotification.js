@@ -10,9 +10,9 @@ export default (fromCurr, toCurr, oldValue, newValue) => {
     iconUrl: browser.runtime.getURL(manifest.icons[48]),
   };
 
-  if (oldValue) {  // on update
+  if (oldValue) { // on update
     opts.message = `${fromCurr} to ${toCurr} exchange rate updated:\n${oldValue} → ${newValue}`;
-  } else {  // on frist get
+  } else { // on frist get
     opts.message = `${fromCurr} to ${toCurr} exchange rate got:\n${newValue}`;
   }
 

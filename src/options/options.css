@@ -17,6 +17,9 @@ body {
   max-width: 800px;
   margin: 0 auto;
 }
+.container h1 {
+  text-align: center;
+}
 
 .row {
   margin-bottom: 5px;

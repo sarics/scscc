@@ -69,7 +69,7 @@ browser.storage.local.get()
     const newStorage = {};
 
     if (storage.preferences && Object.keys(storage.preferences).length === Object.keys(preferences).length) {
-      preferences = storage.preferences;
+      ({ preferences } = storage);
     } else {
       preferences = Object.assign({}, preferences, storage.preferences || {});
       newStorage.preferences = preferences;
@@ -89,7 +89,7 @@ browser.storage.local.get()
         currRates = newCurrRates;
         newStorage.currRates = newCurrRates;
       } else {
-        currRates = storage.currRates;
+        ({ currRates } = storage);
       }
     } else {
       newStorage.currRates = {};
@@ -121,7 +121,7 @@ const checkCurrRate = (currRate, fromCurr, toCurr) => {
   const reqKey = `${fromCurr}to${toCurr}`;
 
   if (!currRates[reqKey] || currRates[reqKey].value !== currRate.value || currRates[reqKey].updatedAt !== currRate.updatedAt) {
-    if (preferences.noti) {
+    if (preferences.noti && currRate.value) {
       const oldValue = (currRates[reqKey] && currRates[reqKey].value) || null;
       showNotification(fromCurr, toCurr, oldValue, currRate.value);
     }
