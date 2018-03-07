@@ -23,10 +23,14 @@ module.exports = {
     filename: '[name]/[name].js',
   },
 
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+  },
+
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         use: [
           {
             loader: 'babel-loader',
