@@ -2,11 +2,11 @@ import { h } from 'hyperapp';
 
 import OptionsContainer from './components/OptionsContainer';
 
-const App = ({ options, preferences }, { preferences: { handleChange } }) => (
+const App = () => (
   <div class="container">
     <h1>SCs Currency Converter - Options</h1>
 
-    <OptionsContainer options={options} preferences={preferences} onOptionChange={handleChange} />
+    <OptionsContainer />
   </div>
 );
 

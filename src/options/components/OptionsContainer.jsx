@@ -1,5 +1,7 @@
 import { h } from 'hyperapp';
 
+import { Connect } from '../store';
+
 import OptionField from './OptionField';
 import ResetButton from './ResetButton';
 
@@ -32,4 +34,13 @@ const OptionsContainer = ({ options, preferences, onOptionChange }) => (
   </div>
 );
 
-export default OptionsContainer;
+const mapStateToProps = ({ options, preferences }) => ({
+  options,
+  preferences,
+});
+
+const mapActionsToProps = ({ preferences }) => ({
+  onOptionChange: preferences.handleChange,
+});
+
+export default Connect(mapStateToProps, mapActionsToProps)(OptionsContainer);
