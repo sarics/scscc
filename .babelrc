@@ -5,12 +5,12 @@
         "browsers": "Firefox >= 52"
       },
       "modules": false
-    }],
-    ["@babel/preset-react", {
-      "pragma": "h"
     }]
   ],
   "plugins": [
+    ["@babel/plugin-transform-react-jsx", {
+      "pragma": "h"
+    }],
     "@babel/plugin-proposal-object-rest-spread"
   ]
 }
