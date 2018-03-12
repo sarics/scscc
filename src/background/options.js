@@ -2,7 +2,7 @@ export default [
   {
     title: 'Convert to',
     name: 'toCurr',
-    type: 'menulist',
+    type: 'select',
     value: '',
     options: [
       { value: '', label: 'Please select a currency' },
@@ -175,13 +175,13 @@ export default [
   {
     title: 'Round price',
     name: 'round',
-    type: 'bool',
+    type: 'checkbox',
     value: true,
   },
   {
     title: 'Currency symbol',
     name: 'symbol',
-    type: 'string',
+    type: 'text',
     value: '',
   },
   {
@@ -203,13 +203,13 @@ export default [
   {
     title: 'Separate symbol from price',
     name: 'symbSep',
-    type: 'bool',
+    type: 'checkbox',
     value: true,
   },
   {
     title: 'Thousand separator',
     name: 'sepTho',
-    type: 'menulist',
+    type: 'select',
     value: ' ',
     options: [
       {
@@ -233,7 +233,7 @@ export default [
   {
     title: 'Decimal separator',
     name: 'sepDec',
-    type: 'menulist',
+    type: 'select',
     value: ',',
     options: [
       {
@@ -249,13 +249,13 @@ export default [
   {
     title: 'Add custom style to converted prices',
     name: 'style',
-    type: 'bool',
+    type: 'checkbox',
     value: true,
   },
   {
     title: 'Show exchange rate update notifications',
     name: 'noti',
-    type: 'bool',
+    type: 'checkbox',
     value: true,
   },
 ];

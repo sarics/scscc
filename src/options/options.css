@@ -42,12 +42,12 @@ body {
   padding: 0 5px 5px;
 }
 
-#options .col:first-child {
+.options .col:first-child {
   width: 100%;
 }
 
 @media (min-width: 500px) {
-  #options .col:first-child {
+  .options .col:first-child {
     width: 250px;
   }
 }

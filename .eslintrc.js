@@ -19,5 +19,8 @@ module.exports = {
     'no-param-reassign': ['error', { props: false }],
 
     'react/no-unknown-property': 'off',
+    'react/prop-types': 'off',
+
+    'jsx-a11y/label-has-for': 'off',
   },
 };
