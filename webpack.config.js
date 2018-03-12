@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const XRegExp = require('xregexp/lib/xregexp');
@@ -8,6 +9,8 @@ const XRegExpUnicodeProperties = require('xregexp/lib/addons/unicode-properties'
 
 XRegExpUnicodeBase(XRegExp);
 XRegExpUnicodeProperties(XRegExp);
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -45,10 +48,12 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.DefinePlugin({
       UNICODE_ALPHABETIC: JSON.stringify(XRegExp._getUnicodeProperty('Alphabetic').bmp), // eslint-disable-line no-underscore-dangle
     }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
+    isProduction && new webpack.optimize.ModuleConcatenationPlugin(),
+    isProduction && new UglifyJsPlugin(),
     new CopyWebpackPlugin([
       {
         from: 'manifest.json',
@@ -61,12 +66,5 @@ module.exports = {
         from: '*/*.+(html|css)',
       },
     ]),
-  ],
-
-  stats: {
-    // Examine all modules
-    maxModules: Infinity,
-    // Display bailout reasons
-    optimizationBailout: true,
-  },
+  ].filter(Boolean),
 };
