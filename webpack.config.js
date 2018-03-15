@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const XRegExp = require('xregexp/lib/xregexp');
@@ -13,7 +12,12 @@ XRegExpUnicodeProperties(XRegExp);
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
+  mode: process.env.NODE_ENV,
+
+  devtool: isProduction ? false : 'cheap-module-source-map',
+
   context: path.resolve(__dirname, 'src'),
+
   entry: {
     background: './background/index.js',
     content: './content/index.js',
@@ -48,12 +52,9 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.DefinePlugin({
       UNICODE_ALPHABETIC: JSON.stringify(XRegExp._getUnicodeProperty('Alphabetic').bmp), // eslint-disable-line no-underscore-dangle
     }),
-    isProduction && new webpack.optimize.ModuleConcatenationPlugin(),
-    isProduction && new UglifyJsPlugin(),
     new CopyWebpackPlugin([
       {
         from: 'manifest.json',
@@ -66,5 +67,5 @@ module.exports = {
         from: '*/*.+(html|css)',
       },
     ]),
-  ].filter(Boolean),
+  ],
 };
