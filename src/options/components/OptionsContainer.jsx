@@ -1,11 +1,9 @@
 import { h } from 'hyperapp';
 
-import { Connect } from '../store';
-
 import OptionField from './OptionField';
 import ResetButton from './ResetButton';
 
-const OptionsContainer = ({ options, preferences, onOptionChange }) => (
+const OptionsContainer = () => ({ options, preferences }, { preferences: { handleChange } }) => (
   <div class="options">
     {options.map(({
       name,
@@ -19,7 +17,7 @@ const OptionsContainer = ({ options, preferences, onOptionChange }) => (
         </div>
 
         <div class="col">
-          <OptionField id={`option-${name}`} type={type} name={name} value={preferences[name]} options={opts} onChange={onOptionChange} />
+          <OptionField id={`option-${name}`} type={type} name={name} value={preferences[name]} options={opts} onChange={handleChange} />
         </div>
       </div>
     ))}
@@ -34,13 +32,4 @@ const OptionsContainer = ({ options, preferences, onOptionChange }) => (
   </div>
 );
 
-const mapStateToProps = ({ options, preferences }) => ({
-  options,
-  preferences,
-});
-
-const mapActionsToProps = ({ preferences }) => ({
-  onOptionChange: preferences.handleChange,
-});
-
-export default Connect(mapStateToProps, mapActionsToProps)(OptionsContainer);
+export default OptionsContainer;

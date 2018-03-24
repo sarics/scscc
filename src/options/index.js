@@ -1,7 +1,5 @@
 import { app } from 'hyperapp';
 
-import { withStore } from './store';
-
 import actions from './actions';
 import App from './App';
 
@@ -12,7 +10,7 @@ Promise.all([browser.runtime.getBackgroundPage(), browser.storage.local.get('pre
       preferences: storage.preferences,
     };
 
-    const main = withStore(app)(initialState, actions, App, document.getElementById('app'));
+    const main = app(initialState, actions, App, document.getElementById('app'));
 
     browser.storage.onChanged.addListener(({ preferences }) => {
       if (preferences) main.preferences.set(preferences.newValue);
