@@ -40,5 +40,8 @@
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.12",
     "xregexp": "^4.1.1"
-  }
+  },
+  "browserslist": [
+    "Firefox ESR"
+  ]
 }
