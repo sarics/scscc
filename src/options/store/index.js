@@ -19,7 +19,7 @@ const setValueForPath = (path, value, data) => {
   return newData;
 };
 
-const Store = (initialState = {}, actions) => {
+const createStore = (initialState = {}, actions) => {
   let state = initialState;
 
   return {
@@ -54,7 +54,7 @@ export const withStore = (app) => (initialState, actionsTemplate, view, containe
   const enhancedActions = enhanceActions(actionsTemplate);
   const appActions = app(initialState, enhancedActions, view, container);
 
-  store = new Store(initialState, appActions);
+  store = createStore(initialState, appActions);
 
   return appActions;
 };
