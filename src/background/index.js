@@ -2,19 +2,6 @@ import options from './options';
 import getCurrRate from './utils/getCurrRate';
 import showNotification from './utils/showNotification';
 
-const icons = {
-  enabled: {
-    16: browser.runtime.getURL('icons/icon16.png'),
-    32: browser.runtime.getURL('icons/icon32.png'),
-    48: browser.runtime.getURL('icons/icon48.png'),
-  },
-  disabled: {
-    16: browser.runtime.getURL('icons/icon16_off.png'),
-    32: browser.runtime.getURL('icons/icon32_off.png'),
-    48: browser.runtime.getURL('icons/icon48_off.png'),
-  },
-};
-
 let preferences = { enabled: true };
 let currRates = {};
 
@@ -99,7 +86,7 @@ browser.storage.local.get()
 
     if (!preferences.toCurr) window.openOptionsPage();
 
-    if (browser.browserAction.setIcon) browser.browserAction.setIcon({ path: preferences.enabled ? icons.enabled : icons.disabled });
+    if (browser.browserAction.setBadgeText && !preferences.enabled) browser.browserAction.setBadgeText({ text: 'OFF' });
     browser.browserAction.onClicked.addListener(openPopupTab);
   })
   .catch(onError);
@@ -107,7 +94,7 @@ browser.storage.local.get()
 browser.storage.onChanged.addListener((changes) => {
   if (changes.preferences && changes.preferences.newValue) {
     const newPrefs = changes.preferences.newValue;
-    if (browser.browserAction.setIcon && newPrefs.enabled !== preferences.enabled) browser.browserAction.setIcon({ path: newPrefs.enabled ? icons.enabled : icons.disabled });
+    if (browser.browserAction.setBadgeText && newPrefs.enabled !== preferences.enabled) browser.browserAction.setBadgeText({ text: newPrefs.enabled ? '' : 'OFF' });
 
     preferences = newPrefs;
   }
