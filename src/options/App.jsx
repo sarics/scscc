@@ -14,9 +14,7 @@ const App = () => (
     </section>
 
     <section class="section">
-      <div class="container">
-        <OptionsContainer />
-      </div>
+      <OptionsContainer />
     </section>
   </div>
 );

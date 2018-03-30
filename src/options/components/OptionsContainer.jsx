@@ -4,7 +4,7 @@ import OptionField from './OptionField';
 import ResetButton from './ResetButton';
 
 const OptionsContainer = () => ({ options, preferences }, { preferences: { handleChange } }) => (
-  <div class="options">
+  <div class="container">
     {options.map(({
       name,
       title,
