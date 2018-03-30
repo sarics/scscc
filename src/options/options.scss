@@ -1,1 +1,10 @@
-@import '~bulma/bulma';
+@import "~bulma/sass/utilities/_all";
+@import "~bulma/sass/base/_all";
+
+@import "~bulma/sass/layout/hero";
+@import "~bulma/sass/layout/section";
+
+@import "~bulma/sass/elements/container";
+@import "~bulma/sass/elements/button";
+@import "~bulma/sass/elements/form";
+@import "~bulma/sass/elements/title";
