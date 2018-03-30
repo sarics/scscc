@@ -37,6 +37,20 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(scss|sass)$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+          'postcss-loader',
+          'sass-loader',
+        ],
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [
@@ -64,7 +78,7 @@ module.exports = {
         to: 'icons',
       },
       {
-        from: '*/*.+(html|css)',
+        from: '*/*.html',
       },
     ]),
   ],

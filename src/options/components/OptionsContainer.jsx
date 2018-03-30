@@ -11,22 +11,30 @@ const OptionsContainer = () => ({ options, preferences }, { preferences: { handl
       type,
       options: opts,
     }) => (
-      <div key={name} class="row">
-        <div class="col">
-          <label for={`option-${name}`}>{title}</label>
+      <div key={name} class="field is-horizontal">
+        <div class={['field-label', ['text', 'select'].indexOf(type) > -1 && 'is-normal'].filter(Boolean).join(' ')}>
+          <label for={`option-${name}`} class="label">{title}</label>
         </div>
 
-        <div class="col">
-          <OptionField id={`option-${name}`} type={type} name={name} value={preferences[name]} options={opts} onChange={handleChange} />
+        <div className="field-body">
+          <div class="field">
+            <div className="control">
+              <OptionField id={`option-${name}`} type={type} name={name} value={preferences[name]} options={opts} onChange={handleChange} />
+            </div>
+          </div>
         </div>
       </div>
     ))}
 
-    <div class="row">
-      <div class="col" />
+    <div class="field is-horizontal">
+      <div class="field-label" />
 
-      <div class="col">
-        <ResetButton />
+      <div class="field-body">
+        <div className="field">
+          <div className="control">
+            <ResetButton />
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -3,10 +3,21 @@ import { h } from 'hyperapp';
 import OptionsContainer from './components/OptionsContainer';
 
 const App = () => (
-  <div class="container">
-    <h1>SCs Currency Converter - Options</h1>
+  <div>
+    <section class="hero is-info">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Options</h1>
+          <h2 class="subtitle">SCs Currency Converter</h2>
+        </div>
+      </div>
+    </section>
 
-    <OptionsContainer />
+    <section class="section">
+      <div class="container">
+        <OptionsContainer />
+      </div>
+    </section>
   </div>
 );
 

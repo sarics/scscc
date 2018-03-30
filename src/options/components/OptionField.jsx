@@ -20,25 +20,31 @@ const OptionField = ({
   switch (type) {
     case 'select':
       return (
-        <select id={id} name={name} value={value} onchange={handleChange}>
-          {options.map(({ value: val, label }) => (
-            <option key={val} value={val}>{label}</option>
-          ))}
-        </select>
+        <div className="select is-fullwidth">
+          <select id={id} name={name} value={value} onchange={handleChange}>
+            {options.map(({ value: val, label }) => (
+              <option key={val} value={val}>{label}</option>
+            ))}
+          </select>
+        </div>
       );
     case 'text':
       return (
-        <input type="text" id={id} name={name} value={value} onchange={handleChange} />
+        <input type="text" id={id} class="input" name={name} value={value} onchange={handleChange} />
       );
     case 'checkbox':
       return (
-        <input type="checkbox" id={id} name={name} checked={value} onchange={handleChange} />
+        <label class="checkbox">
+          <input type="checkbox" id={id} class="is-hidden" name={name} checked={value} onchange={handleChange} />
+          <i class={['far', value ? 'fa-check-square' : 'fa-square'].join(' ')} />
+        </label>
       );
     case 'radio':
       return options.map(({ value: val, label }) => (
-        <label key={val}>
-          <input type="radio" name={name} value={val} checked={val === value} onchange={handleChange} />
-          {label}
+        <label key={val} class="radio">
+          <input type="radio" class="is-hidden" name={name} value={val} checked={val === value} onchange={handleChange} />
+          <i class={['far', val === value ? 'fa-dot-circle' : 'fa-circle'].join(' ')} />
+          {` ${label}`}
         </label>
       ));
     default:

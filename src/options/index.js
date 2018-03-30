@@ -3,6 +3,9 @@ import { app } from 'hyperapp';
 import actions from './actions';
 import App from './App';
 
+import './icons';
+import './options.scss';
+
 Promise.all([browser.runtime.getBackgroundPage(), browser.storage.local.get('preferences')])
   .then(([bgWindow, storage]) => {
     const initialState = {

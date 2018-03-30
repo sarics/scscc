@@ -8,7 +8,7 @@ const ResetButton = () => {
   };
 
   return (
-    <button onclick={handleClick}>Reset exchange rates</button>
+    <button class="button is-light" onclick={handleClick}>Reset exchange rates</button>
   );
 };
 
