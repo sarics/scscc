@@ -19,17 +19,17 @@
     "build": "npm-run-all clean build:webpack build:web-ext"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
-    "copy-webpack-plugin": "^4.4.1",
-    "eslint": "^4.18.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.6.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.9.0",
-    "npm-run-all": "^4.1.2",
-    "rimraf": "^2.6.2",
-    "web-ext": "^2.4.0",
-    "webpack": "^3.11.0",
-    "xregexp": "^4.1.1"
+    "eslint-plugin-import": "^2.14.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.6.3",
+    "web-ext": "^2.9.3",
+    "webpack": "^3.12.0",
+    "xregexp": "^4.2.0"
   }
 }
