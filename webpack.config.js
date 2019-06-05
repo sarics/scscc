@@ -10,7 +10,10 @@ XRegExpUnicodeBase(XRegExp);
 XRegExpUnicodeProperties(XRegExp);
 
 module.exports = {
+  mode: process.env.NODE_ENV,
+
   context: path.resolve(__dirname, 'src'),
+
   entry: {
     background: './background/index.js',
     content: './content/index.js',
@@ -43,7 +46,6 @@ module.exports = {
     new webpack.DefinePlugin({
       UNICODE_ALPHABETIC: JSON.stringify(XRegExp._getUnicodeProperty('Alphabetic').bmp), // eslint-disable-line no-underscore-dangle
     }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
     new CopyWebpackPlugin([
       {
         from: 'manifest.json',
@@ -57,6 +59,10 @@ module.exports = {
       },
     ]),
   ],
+
+  optimization: {
+    minimize: false,
+  },
 
   stats: {
     // Examine all modules
