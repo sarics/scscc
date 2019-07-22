@@ -1,18 +1,12 @@
 const requests = {};
 
-const patterns = [
-  /id=['"]?exchange_rate['"]?[^>]*value=['"]?(\d+\.\d+)['"]?/i,
-  /id=['"]?knowledge-currency__tgt-input['"]?[^>]*value=['"]?(\d+\.\d+)['"]?/i,
-];
+const pattern = /data-exchange-rate=['"]?(\d+(\.\d+)?)['"]?/i;
 
-const getTxtMatch = (txt) =>
-  patterns.reduce((txtMatch, pattern) => {
-    if (txtMatch) return txtMatch;
-
-    const match = txt.match(pattern);
-    if (match && match[1]) return match[1];
-    return '';
-  }, '');
+const getTxtMatch = (txt) => {
+  const match = txt.match(pattern);
+  if (match && match[1]) return match[1];
+  return '';
+};
 
 // on getCurrRate request complete
 const reqComplete = (request, currRates, reqKey) => {
