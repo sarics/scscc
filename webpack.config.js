@@ -26,6 +26,8 @@ module.exports = {
     filename: '[name]/[name].js',
   },
 
+  devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-source-map' : false,
+
   module: {
     rules: [
       {
