@@ -9,7 +9,7 @@ const onChange = ({ target }) => {
   if (Object.keys(changedPrefs).length) {
     browser.storage.local.get('preferences')
       .then((storage) => {
-        browser.storage.local.set({ preferences: Object.assign({}, storage.preferences, changedPrefs) });
+        browser.storage.local.set({ preferences: { ...storage.preferences, ...changedPrefs } });
       });
   }
 };

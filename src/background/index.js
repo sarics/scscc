@@ -54,13 +54,12 @@ const openOptionsTab = () => openTab('options/options.html');
 
 const openPopupTab = () => openTab('popup/popup.html');
 
-window.openOptionsPage = () =>
-  browser.runtime.openOptionsPage()
-    .catch((err) => {
-      onError(err);
+window.openOptionsPage = () => browser.runtime.openOptionsPage()
+  .catch((err) => {
+    onError(err);
 
-      openOptionsTab();
-    });
+    openOptionsTab();
+  });
 
 
 // get storage
@@ -71,7 +70,7 @@ browser.storage.local.get()
     if (storage.preferences && Object.keys(storage.preferences).length === Object.keys(preferences).length) {
       ({ preferences } = storage);
     } else {
-      preferences = Object.assign({}, preferences, storage.preferences || {});
+      preferences = { ...preferences, ...storage.preferences || {} };
       newStorage.preferences = preferences;
     }
 
@@ -126,7 +125,7 @@ const checkCurrRate = (currRate, fromCurr, toCurr) => {
       showNotification(fromCurr, toCurr, oldValue, currRate.value);
     }
 
-    const newCurrRates = Object.assign({}, currRates, { [reqKey]: currRate });
+    const newCurrRates = { ...currRates, [reqKey]: currRate };
     browser.storage.local.set({ currRates: newCurrRates });
   }
 };

@@ -14,11 +14,10 @@ export default (onMutation) => {
   const observer = new MutationObserver(checkMutations);
 
   return {
-    observe: () =>
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      }),
+    observe: () => observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    }),
 
     disconnect: () => observer.disconnect(),
   };

@@ -10,7 +10,7 @@ const getTxtMatch = (txt) => {
 
 // on getCurrRate request complete
 const reqComplete = (request, currRates, reqKey) => {
-  const currRate = currRates[reqKey] ? Object.assign({}, currRates[reqKey]) : {};
+  const currRate = currRates[reqKey] ? { ...currRates[reqKey] } : {};
 
   if (request && request.status === 200) {
     currRate.updatedAt = Date.now();
