@@ -28,7 +28,6 @@ const onError = (error) => {
   console.error('SCsCC - error:', error.message);
 };
 
-
 const openTab = (path) => {
   const url = browser.runtime.getURL(path);
   const notFoundErr = 'no opened tab found';
@@ -60,7 +59,6 @@ window.openOptionsPage = () => browser.runtime.openOptionsPage()
 
     openOptionsTab();
   });
-
 
 // get storage
 browser.storage.local.get()
@@ -114,7 +112,6 @@ browser.storage.onChanged.addListener((changes) => {
     currRates = changes.currRates.newValue;
   }
 });
-
 
 const checkCurrRate = (currRate, fromCurr, toCurr) => {
   const reqKey = `${fromCurr}to${toCurr}`;

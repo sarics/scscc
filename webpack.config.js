@@ -48,28 +48,23 @@ module.exports = {
     new webpack.DefinePlugin({
       UNICODE_ALPHABETIC: JSON.stringify(XRegExp._getUnicodeProperty('Alphabetic').bmp), // eslint-disable-line no-underscore-dangle
     }),
-    new CopyWebpackPlugin([
-      {
-        from: 'manifest.json',
-      },
-      {
-        from: 'icons',
-        to: 'icons',
-      },
-      {
-        from: '*/*.+(html|css)',
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'manifest.json',
+        },
+        {
+          from: 'icons',
+          to: 'icons',
+        },
+        {
+          from: '*/*.+(html|css)',
+        },
+      ],
+    }),
   ],
 
   optimization: {
     minimize: false,
-  },
-
-  stats: {
-    // Examine all modules
-    maxModules: Infinity,
-    // Display bailout reasons
-    optimizationBailout: true,
   },
 };

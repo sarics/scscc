@@ -2,7 +2,6 @@ import getOptionRowElem from './utils/getOptionRowElem';
 import getButtonRowElem from './utils/getButtonRowElem';
 import getChangedPrefs from './utils/getChangedPrefs';
 
-
 const onChange = ({ target }) => {
   const changedPrefs = getChangedPrefs(target);
 

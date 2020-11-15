@@ -37,7 +37,6 @@ const refresh = () => {
   if (!document.hidden) refreshPrices();
 };
 
-
 const onPreferencesChange = (newPrefs) => {
   if (paused) {
     lastChanges.preferences = [newPrefs];
@@ -70,7 +69,6 @@ const onCurrRatesChange = (newCurrRates, hasNew) => {
   if (hasNew) replacePrices();
 };
 currRates.onChange(onCurrRatesChange);
-
 
 const pause = () => {
   if (paused) return;

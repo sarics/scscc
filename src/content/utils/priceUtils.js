@@ -21,7 +21,6 @@ export const checkPriceSpecCases = (txt, match) => {
   return match;
 };
 
-
 export const cleanPrice = (price) => {
   // remove currency symbols and spaces
   let cleanedPrice = price.replace(cleanSymbPatt, '');
@@ -42,7 +41,6 @@ export const cleanPrice = (price) => {
 
   return cleanedPrice;
 };
-
 
 export const formatPrice = (price, preferences) => {
   // set rounding

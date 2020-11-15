@@ -88,7 +88,6 @@ const checkSiblingMatches = (textNode, toCurr, { numPatt, symbPatts }) => {
   return matches;
 };
 
-
 // check if there is any pattern match in a text node and return the matches
 export default (textNodes, toCurr, patts) => {
   const priceMatches = [];
